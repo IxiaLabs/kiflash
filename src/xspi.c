@@ -341,6 +341,11 @@ int XSpi_Start(XSpi *InstancePtr)
 {
 	u32 ControlReg;
 
+	printf("XSpi_Start 1\n");
+	if(InstancePtr == NULL)
+	{
+		return XST_FAILURE;	
+	}
 	// Xil_AssertNonvoid(InstancePtr != NULL);
 	// Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
@@ -368,17 +373,19 @@ int XSpi_Start(XSpi *InstancePtr)
 	 * context. So we wait until after the r/m/w of the control register to
 	 * enable the Global Interrupt Enable.
 	 */
+	printf("XSpi_Start 2\n");	
 	ControlReg = XSpi_GetControlReg(InstancePtr);
 	ControlReg |= XSP_CR_TXFIFO_RESET_MASK | XSP_CR_RXFIFO_RESET_MASK |
 			XSP_CR_ENABLE_MASK;
 	XSpi_SetControlReg(InstancePtr, ControlReg);
-
+	printf("XSpi_Start 3\n");	
 	/*
 	 * Enable the Global Interrupt Enable just after we start.
 	 */
 	// XSpi_IntrGlobalEnable(InstancePtr);
 	XSpi_IntrGlobalDisable(InstancePtr);
-
+	printf("XSpi_Start 4\n");		
+	fflush(stdout);
 	return XST_SUCCESS;
 }
 
@@ -580,6 +587,13 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 	u32 Data = 0;
 	u8  DataWidth;
 
+	printf("XSpi_Transfer 1\n");
+	fflush(stdout);
+	if(SendBufPtr == NULL || InstancePtr == NULL || ByteCount == 0 || InstancePtr->IsReady != XIL_COMPONENT_IS_READY) {
+		printf("XSpi_Transfer 1.5\n");
+		fflush(stdout);
+		return XST_FAILURE;
+	}
 	/*
 	 * The RecvBufPtr argument can be NULL.
 	 */
@@ -606,7 +620,11 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 	/*
 	 * Save the Global Interrupt Enable Register.
 	 */
+	printf("XSpi_Transfer 2\n");
+	fflush(stdout);
 	GlobalIntrReg = XSpi_IsIntrGlobalEnabled(InstancePtr);
+	printf("XSpi_Transfer 3 GlobalIntrReg %X\n", GlobalIntrReg);
+	fflush(stdout);
 
 	/*
 	 * Enter a critical section from here to the end of the function since
@@ -614,6 +632,8 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 	 * is modified (r/m/w).
 	 */
 	XSpi_IntrGlobalDisable(InstancePtr);
+	printf("XSpi_Transfer 4 \n");	
+	fflush(stdout);
 
 	ControlReg = XSpi_GetControlReg(InstancePtr);
 
@@ -635,7 +655,8 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 			}
 		}
 	}
-
+	printf("XSpi_Transfer 5 ControlReg %X SlaveSelectReg %X SlaveSelectMask %X\n", ControlReg, InstancePtr->SlaveSelectReg, InstancePtr->SlaveSelectMask);	
+	fflush(stdout);
 	/*
 	 * Set the busy flag, which will be cleared when the transfer
 	 * is completely done.
@@ -661,6 +682,8 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 	 * that the status register must be read each loop iteration.
 	 */
 	StatusReg = XSpi_GetStatusReg(InstancePtr);
+	printf("XSpi_Transfer 6 StatusReg %X DataWidth %d\n", StatusReg, InstancePtr->DataWidth);		
+	fflush(stdout);
 
 	while (((StatusReg & XSP_SR_TX_FULL_MASK) == 0) &&
 		(InstancePtr->RemainingBytes > 0)) {
@@ -687,7 +710,8 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 		StatusReg = XSpi_GetStatusReg(InstancePtr);
 	}
 
-	
+	printf("XSpi_Transfer 7\n");			
+	fflush(stdout);
 	/*
 	 * Set the slave select register to select the device on the SPI before
 	 * starting the transfer of data.
@@ -704,14 +728,16 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 	ControlReg = XSpi_GetControlReg(InstancePtr);
 	ControlReg &= ~XSP_CR_TRANS_INHIBIT_MASK;
 	XSpi_SetControlReg(InstancePtr, ControlReg);
-
+	printf("XSpi_Transfer 8 ControlReg %X SlaveSelectReg %X\n", ControlReg, InstancePtr->SlaveSelectReg);	
+	fflush(stdout);
 	/*
 	 * If the interrupts are enabled as indicated by Global Interrupt
 	 * Enable Register, then enable the transmit empty interrupt to operate
 	 * in Interrupt mode of operation.
 	 */
 	if (GlobalIntrReg == TRUE) { /* Interrupt Mode of operation */
-
+		printf("XSpi_Transfer 8.1 GlobalIntrReg %X\n", GlobalIntrReg);	
+		fflush(stdout);
 		/*
 		 * Enable the transmit empty interrupt, which we use to
 		 * determine progress on the transmission.
@@ -722,9 +748,12 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 		 * End critical section.
 		 */
 		XSpi_IntrGlobalEnable(InstancePtr);
+		printf("XSpi_Transfer 8.2 GlobalIntrReg %X\n", GlobalIntrReg);	
+		fflush(stdout);
 
 	} else { /* Polled mode of operation */
-
+		printf("XSpi_Transfer 8.3 Polled mode entered ByteCount %d\n", ByteCount);	
+		fflush(stdout);
 		/*
 		 * If interrupts are not enabled, poll the status register to
 		 * Transmit/Receive SPI data.
@@ -863,8 +892,11 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 				ControlReg &= ~XSP_CR_TRANS_INHIBIT_MASK;
 				XSpi_SetControlReg(InstancePtr, ControlReg);
 			}
+			printf("XSpi_Transfer 8.9 Polled mode exited\n");	
+			fflush(stdout);
 		}
-
+		printf("XSpi_Transfer 9\n");	
+		fflush(stdout);
 		/*
 		 * Stop the transfer (hold off automatic sending) by inhibiting
 		 * the transmitter.
@@ -882,6 +914,9 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 		XSpi_SetSlaveSelectReg(InstancePtr,
 					InstancePtr->SlaveSelectMask);
 		InstancePtr->IsBusy = FALSE;
+
+		printf("XSpi_Transfer 10\n");	
+		fflush(stdout);
 	}
 
 	return XST_SUCCESS;
@@ -922,6 +957,8 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 ******************************************************************************/
 int XSpi_SetSlaveSelect(XSpi *InstancePtr, u32 SlaveMask)
 {
+	printf("XSpi_SetSlaveSelect 1\n");
+	fflush(stdout);
 	int NumAsserted;
 	int Index;
 
@@ -937,6 +974,8 @@ int XSpi_SetSlaveSelect(XSpi *InstancePtr, u32 SlaveMask)
 	 * transfer is done.
 	 */
 	if (InstancePtr->IsBusy) {
+		printf("XSpi_SetSlaveSelect 1.5\n");
+		fflush(stdout);		
 		return XST_DEVICE_BUSY;
 	}
 
@@ -951,10 +990,15 @@ int XSpi_SetSlaveSelect(XSpi *InstancePtr, u32 SlaveMask)
 		}
 	}
 
+	printf("XSpi_SetSlaveSelect 2 NumAsserted %d\n", NumAsserted);
+	fflush(stdout);		
 	/*
 	 * Return an error if more than one slave is selected.
 	 */
 	if (NumAsserted > 1) {
+		printf("XSpi_SetSlaveSelect 2.5 NumAsserted %d\n", NumAsserted);
+		fflush(stdout);		
+
 		return XST_SPI_TOO_MANY_SLAVES;
 	}
 
@@ -965,7 +1009,8 @@ int XSpi_SetSlaveSelect(XSpi *InstancePtr, u32 SlaveMask)
 	 * mask.
 	 */
 	InstancePtr->SlaveSelectReg = ~SlaveMask;
-
+	printf("XSpi_SetSlaveSelect 3 SlaveMask %d\n", InstancePtr->SlaveSelectReg);
+	fflush(stdout);	
 	return XST_SUCCESS;
 }
 
@@ -1214,7 +1259,7 @@ void XSpi_InterruptHandler(void *InstancePtr)
 
 		while ((StatusReg & XSP_SR_RX_EMPTY_MASK) == 0) {
 
-			Data = XSpi_ReadReg(SpiPtr->BaseAddr, XSP_DRR_OFFSET);
+			Data = XSpi_PciReadReg(SpiPtr, XSP_DRR_OFFSET);
 
 			/*
 			 * Data Transfer Width is Byte (8 bit).
@@ -1278,7 +1323,7 @@ void XSpi_InterruptHandler(void *InstancePtr)
 					Data = *(u32 *) SpiPtr->SendBufferPtr;
 				}
 
-				XSpi_WriteReg(SpiPtr->BaseAddr, XSP_DTR_OFFSET,
+				XSpi_PciWriteReg(SpiPtr, XSP_DTR_OFFSET,
 						Data);
 				SpiPtr->SendBufferPtr += (DataWidth >> 3);
 				SpiPtr->RemainingBytes -= (DataWidth >> 3);

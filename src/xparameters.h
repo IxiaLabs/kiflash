@@ -240,7 +240,7 @@ deleted XPAR_INTC_0_MAX_ID, XPAR_INTC_1_MAX_ID
  */
 #define XPAR_XSPI_NUM_INSTANCES      1         /* Number of instances */
 
-#define XPAR_SPI_0_DEVICE_ID        32         /* Device ID for instance */
+#define XPAR_SPI_0_DEVICE_ID        50         /* Device ID for instance */
 #define XPAR_SPI_0_BASEADDR         0x00060000 /* Device base address */
 #define XPAR_SPI_0_FIFO_EXIST       TRUE       /* Does device have FIFOs? */
 #define XPAR_SPI_0_SLAVE_ONLY       FALSE      /* Is the device slave only? */

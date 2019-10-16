@@ -67,54 +67,13 @@ extern "C" {
 
 /***************************** Include Files *********************************/
 
-#include "xil_types.h"
-#include "xil_assert.h"
-#include "xil_io.h"
+// #include "xil_types.h"
+// #include "xil_assert.h"
+// #include "xil_io.h"
 
 /**************************** Type Definitions *******************************/
 
 
-/***************** Macros (Inline Functions) Definitions *********************/
-
-#define XSpi_In32	Xil_In32
-#define XSpi_Out32	Xil_Out32
-
-/****************************************************************************/
-/**
-*
-* Read from the specified Spi device register.
-*
-* @param	BaseAddress contains the base address of the device.
-* @param	RegOffset contains the offset from the 1st register of the
-*		device to select the specific register.
-*
-* @return	The value read from the register.
-*
-* @note		C-Style signature:
-*		u32 XSpi_ReadReg(u32 BaseAddress, u32 RegOffset);
-*
-******************************************************************************/
-#define XSpi_ReadReg(BaseAddress, RegOffset) \
-	XSpi_In32((BaseAddress) + (RegOffset))
-
-/***************************************************************************/
-/**
-*
-* Write to the specified Spi device register.
-*
-* @param	BaseAddress contains the base address of the device.
-* @param	RegOffset contains the offset from the 1st register of the
-*		device to select the specific register.
-* @param	RegisterValue is the value to be written to the register.
-*
-* @return	None.
-*
-* @note		C-Style signature:
-*		void XSpi_WriteReg(u32 BaseAddress, u32 RegOffset,
-*					u32 RegisterValue);
-******************************************************************************/
-#define XSpi_WriteReg(BaseAddress, RegOffset, RegisterValue) \
-	XSpi_Out32((BaseAddress) + (RegOffset), (RegisterValue))
 
 /************************** Function Prototypes ******************************/
 

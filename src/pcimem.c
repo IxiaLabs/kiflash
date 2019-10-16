@@ -101,7 +101,7 @@ void write64(Pcimem *self, uint64_t address, uint64_t data)
 	uint64_t read_result = 0xdeadbeef;
 	void* virt_addr = self->map_base + address;
 	*((uint64_t *) virt_addr) = data;
-	// uint64_t read_result = *((uint64_t *) virt_addr);
+//	read_result = *((uint64_t *) virt_addr);
 
 //	printf("Written at offset 0x%X 0x%llX: 0x%0lX; readback 0x%lX\n", address, virt_addr, data, read_result);
 //	fflush(stdout);
