@@ -342,7 +342,7 @@ int XSpi_Start(XSpi *InstancePtr)
 	u32 ControlReg;
 
 	printf("XSpi_Start 1\n");
-	if(InstancePtr == NULL)
+	if(InstancePtr == NULL || InstancePtr->IsReady != XIL_COMPONENT_IS_READY)
 	{
 		return XST_FAILURE;	
 	}
@@ -359,7 +359,7 @@ int XSpi_Start(XSpi *InstancePtr)
 	/*
 	 * Enable the interrupts.
 	 */
-	// XSpi_IntrEnable(InstancePtr, XSP_INTR_DFT_MASK);
+	XSpi_IntrEnable(InstancePtr, XSP_INTR_DFT_MASK);
 
 	/*
 	 * Indicate that the device is started before we enable the transmitter
@@ -382,7 +382,9 @@ int XSpi_Start(XSpi *InstancePtr)
 	/*
 	 * Enable the Global Interrupt Enable just after we start.
 	 */
-	// XSpi_IntrGlobalEnable(InstancePtr);
+	XSpi_IntrGlobalEnable(InstancePtr);	
+
+	// disable the interrupt at the end of this
 	XSpi_IntrGlobalDisable(InstancePtr);
 	printf("XSpi_Start 4\n");		
 	fflush(stdout);
@@ -587,8 +589,8 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 	u32 Data = 0;
 	u8  DataWidth;
 
-	printf("XSpi_Transfer 1\n");
-	fflush(stdout);
+//	printf("XSpi_Transfer 1\n");
+//	fflush(stdout);
 	if(SendBufPtr == NULL || InstancePtr == NULL || ByteCount == 0 || InstancePtr->IsReady != XIL_COMPONENT_IS_READY) {
 		printf("XSpi_Transfer 1.5\n");
 		fflush(stdout);
@@ -620,11 +622,11 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 	/*
 	 * Save the Global Interrupt Enable Register.
 	 */
-	printf("XSpi_Transfer 2\n");
-	fflush(stdout);
+//	printf("XSpi_Transfer 2\n");
+//	fflush(stdout);
 	GlobalIntrReg = XSpi_IsIntrGlobalEnabled(InstancePtr);
-	printf("XSpi_Transfer 3 GlobalIntrReg %X\n", GlobalIntrReg);
-	fflush(stdout);
+//	printf("XSpi_Transfer 3 GlobalIntrReg %X\n", GlobalIntrReg);
+//	fflush(stdout);
 
 	/*
 	 * Enter a critical section from here to the end of the function since
@@ -632,8 +634,8 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 	 * is modified (r/m/w).
 	 */
 	XSpi_IntrGlobalDisable(InstancePtr);
-	printf("XSpi_Transfer 4 \n");	
-	fflush(stdout);
+//	printf("XSpi_Transfer 4 \n");	
+//	fflush(stdout);
 
 	ControlReg = XSpi_GetControlReg(InstancePtr);
 
@@ -655,8 +657,8 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 			}
 		}
 	}
-	printf("XSpi_Transfer 5 ControlReg %X SlaveSelectReg %X SlaveSelectMask %X\n", ControlReg, InstancePtr->SlaveSelectReg, InstancePtr->SlaveSelectMask);	
-	fflush(stdout);
+//	printf("XSpi_Transfer 5 ControlReg %X SlaveSelectReg %X SlaveSelectMask %X\n", ControlReg, InstancePtr->SlaveSelectReg, InstancePtr->SlaveSelectMask);	
+//	fflush(stdout);
 	/*
 	 * Set the busy flag, which will be cleared when the transfer
 	 * is completely done.
@@ -682,8 +684,13 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 	 * that the status register must be read each loop iteration.
 	 */
 	StatusReg = XSpi_GetStatusReg(InstancePtr);
-	printf("XSpi_Transfer 6 StatusReg %X DataWidth %d\n", StatusReg, InstancePtr->DataWidth);		
-	fflush(stdout);
+//	printf("XSpi_Transfer 6 StatusReg %X DataWidth %d ByteCount %d\n", StatusReg, DataWidth, ByteCount );		
+//	fflush(stdout);
+
+	StatusReg = XSpi_IntrGetStatus(InstancePtr);
+//	printf("XSpi_Transfer 6.01 IntStatusReg %X\n", StatusReg);	
+//	fflush(stdout);
+
 
 	while (((StatusReg & XSP_SR_TX_FULL_MASK) == 0) &&
 		(InstancePtr->RemainingBytes > 0)) {
@@ -705,12 +712,14 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 		}
 
 		XSpi_PciWriteReg(InstancePtr, XSP_DTR_OFFSET, Data);
+		printf("%X ", Data);		
 		InstancePtr->SendBufferPtr += (DataWidth >> 3);
 		InstancePtr->RemainingBytes -= (DataWidth >> 3);
 		StatusReg = XSpi_GetStatusReg(InstancePtr);
 	}
+	printf(" End data\n");		
 
-	printf("XSpi_Transfer 7\n");			
+//	printf("XSpi_Transfer 7\n");			
 	fflush(stdout);
 	/*
 	 * Set the slave select register to select the device on the SPI before
@@ -728,16 +737,21 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 	ControlReg = XSpi_GetControlReg(InstancePtr);
 	ControlReg &= ~XSP_CR_TRANS_INHIBIT_MASK;
 	XSpi_SetControlReg(InstancePtr, ControlReg);
-	printf("XSpi_Transfer 8 ControlReg %X SlaveSelectReg %X\n", ControlReg, InstancePtr->SlaveSelectReg);	
-	fflush(stdout);
+//	printf("XSpi_Transfer 8 ControlReg %X SlaveSelectReg %X\n", ControlReg, InstancePtr->SlaveSelectReg);	
+//	fflush(stdout);
+
+	StatusReg = XSpi_IntrGetStatus(InstancePtr);
+//	printf("XSpi_Transfer 8.01 IntStatusReg %X\n", StatusReg);	
+//	fflush(stdout);
+
 	/*
 	 * If the interrupts are enabled as indicated by Global Interrupt
 	 * Enable Register, then enable the transmit empty interrupt to operate
 	 * in Interrupt mode of operation.
 	 */
 	if (GlobalIntrReg == TRUE) { /* Interrupt Mode of operation */
-		printf("XSpi_Transfer 8.1 GlobalIntrReg %X\n", GlobalIntrReg);	
-		fflush(stdout);
+//		printf("XSpi_Transfer 8.1 GlobalIntrReg %X\n", GlobalIntrReg);	
+//		fflush(stdout);
 		/*
 		 * Enable the transmit empty interrupt, which we use to
 		 * determine progress on the transmission.
@@ -748,28 +762,39 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 		 * End critical section.
 		 */
 		XSpi_IntrGlobalEnable(InstancePtr);
-		printf("XSpi_Transfer 8.2 GlobalIntrReg %X\n", GlobalIntrReg);	
-		fflush(stdout);
+//		printf("XSpi_Transfer 8.2 GlobalIntrReg %X\n", GlobalIntrReg);	
+//		fflush(stdout);
 
 	} else { /* Polled mode of operation */
-		printf("XSpi_Transfer 8.3 Polled mode entered ByteCount %d\n", ByteCount);	
-		fflush(stdout);
+//		printf("XSpi_Transfer 8.3 Polled mode entered ByteCount %d\n", ByteCount);	
+//		fflush(stdout);
 		/*
 		 * If interrupts are not enabled, poll the status register to
 		 * Transmit/Receive SPI data.
 		 */
 		while(ByteCount > 0) {
-
+			int loopcountdown = 100;
 			/*
 			 * Wait for the transfer to be done by polling the
 			 * Transmit empty status bit
 			 */
 			do {
 				StatusReg = XSpi_IntrGetStatus(InstancePtr);
-			} while ((StatusReg & XSP_INTR_TX_EMPTY_MASK) == 0);
+				// printf("XSpi_Transfer 8.31 StatusReg %X\n", StatusReg);	
+				loopcountdown--;
+			} while ((StatusReg & XSP_INTR_TX_EMPTY_MASK) == 0 && loopcountdown);
+
+			if (loopcountdown == 0)
+			{
+				printf("** XSpi_Transfer 8.31 IntStatusReg %X timed out\n", StatusReg);					
+				fflush(stdout);
+				return XST_FAILURE;
+			}
+
+//			printf("XSpi_Transfer 8.32 StatusReg %X\n", StatusReg);	
 
 			XSpi_IntrClear(InstancePtr,XSP_INTR_TX_EMPTY_MASK);
-
+//			printf("XSpi_Transfer 8.33 StatusReg %X\n", StatusReg);	
 			/*
 			 * A transmit has just completed. Process received data
 			 * and check for more data to transmit. Always inhibit
@@ -892,11 +917,11 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 				ControlReg &= ~XSP_CR_TRANS_INHIBIT_MASK;
 				XSpi_SetControlReg(InstancePtr, ControlReg);
 			}
-			printf("XSpi_Transfer 8.9 Polled mode exited\n");	
-			fflush(stdout);
+//			printf("XSpi_Transfer 8.9 Polled mode exited\n");	
+//			fflush(stdout);
 		}
-		printf("XSpi_Transfer 9\n");	
-		fflush(stdout);
+//		printf("XSpi_Transfer 9\n");	
+//		fflush(stdout);
 		/*
 		 * Stop the transfer (hold off automatic sending) by inhibiting
 		 * the transmitter.
@@ -915,9 +940,177 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 					InstancePtr->SlaveSelectMask);
 		InstancePtr->IsBusy = FALSE;
 
-		printf("XSpi_Transfer 10\n");	
+		printf("XSpi_Transfer 10 succeeded in transfer\n");	
 		fflush(stdout);
 	}
+
+	return XST_SUCCESS;
+}
+
+int XSpi_Transfer_SkipCheck(XSpi *InstancePtr, u8 *SendBufPtr,
+		  u8 *RecvBufPtr, unsigned int ByteCount)
+{
+	u32 ControlReg;
+	u32 GlobalIntrReg;
+	u32 StatusReg;
+	u32 Data = 0;
+	u8  DataWidth;
+
+	printf("XSpi_Transfer_SkipCheck  1\n");
+	fflush(stdout);
+	if(SendBufPtr == NULL || InstancePtr == NULL || ByteCount == 0 || InstancePtr->IsReady != XIL_COMPONENT_IS_READY) {
+		printf("XSpi_Transfer_SkipCheck 1.5\n");
+		fflush(stdout);
+		return XST_FAILURE;
+	}
+	/*
+	 * The RecvBufPtr argument can be NULL.
+	 */
+	// Xil_AssertNonvoid(InstancePtr != NULL);
+	// Xil_AssertNonvoid(SendBufPtr != NULL);
+	// Xil_AssertNonvoid(ByteCount > 0);
+	// Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
+
+	if (InstancePtr->IsStarted != XIL_COMPONENT_IS_STARTED) {
+		return XST_DEVICE_IS_STOPPED;
+	}
+
+	/*
+	 * Make sure there is not a transfer already in progress. No need to
+	 * worry about a critical section here. Even if the Isr changes the bus
+	 * flag just after we read it, a busy error is returned and the caller
+	 * can retry when it gets the status handler callback indicating the
+	 * transfer is done.
+	 */
+	if (InstancePtr->IsBusy) {
+		return XST_DEVICE_BUSY;
+	}
+
+	/*
+	 * Save the Global Interrupt Enable Register.
+	 */
+	printf("XSpi_Transfer_SkipCheck 2\n");
+	fflush(stdout);
+	GlobalIntrReg = XSpi_IsIntrGlobalEnabled(InstancePtr);
+	printf("XSpi_Transfer_SkipCheck 3 GlobalIntrReg %X\n", GlobalIntrReg);
+	fflush(stdout);
+
+	/*
+	 * Enter a critical section from here to the end of the function since
+	 * state is modified, an interrupt is enabled, and the control register
+	 * is modified (r/m/w).
+	 */
+	XSpi_IntrGlobalDisable(InstancePtr);
+	printf("XSpi_Transfer_SkipCheck 4 \n");	
+	fflush(stdout);
+
+	ControlReg = XSpi_GetControlReg(InstancePtr);
+
+	/*
+	 * If configured as a master, be sure there is a slave select bit set
+	 * in the slave select register. If no slaves have been selected, the
+	 * value of the register will equal the mask.  When the device is in
+	 * loopback mode, however, no slave selects need be set.
+	 */
+	if (ControlReg & XSP_CR_MASTER_MODE_MASK) {
+		if ((ControlReg & XSP_CR_LOOPBACK_MASK) == 0) {
+			if (InstancePtr->SlaveSelectReg ==
+				InstancePtr->SlaveSelectMask) {
+				if (GlobalIntrReg == TRUE) {
+					/* Interrupt Mode of operation */
+					XSpi_IntrGlobalEnable(InstancePtr);
+				}
+				return XST_SPI_NO_SLAVE;
+			}
+		}
+	}
+	printf("XSpi_Transfer_SkipCheck 5 ControlReg %X SlaveSelectReg %X SlaveSelectMask %X\n", ControlReg, InstancePtr->SlaveSelectReg, InstancePtr->SlaveSelectMask);	
+	fflush(stdout);
+	/*
+	 * Set the busy flag, which will be cleared when the transfer
+	 * is completely done.
+	 */
+	InstancePtr->IsBusy = TRUE;
+
+	/*
+	 * Set up buffer pointers.
+	 */
+	InstancePtr->SendBufferPtr = SendBufPtr;
+	InstancePtr->RecvBufferPtr = RecvBufPtr;
+
+	InstancePtr->RequestedBytes = ByteCount;
+	InstancePtr->RemainingBytes = ByteCount;
+
+	DataWidth = InstancePtr->DataWidth;
+
+	/*
+	 * Fill the DTR/FIFO with as many bytes as it will take (or as many as
+	 * we have to send). We use the tx full status bit to know if the device
+	 * can take more data. By doing this, the driver does not need to know
+	 * the size of the FIFO or that there even is a FIFO. The downside is
+	 * that the status register must be read each loop iteration.
+	 */
+	StatusReg = XSpi_GetStatusReg(InstancePtr);
+	printf("XSpi_Transfer_SkipCheck 6 StatusReg %X DataWidth %d ByteCount %d\n", StatusReg, DataWidth, ByteCount );		
+	fflush(stdout);
+
+	StatusReg = XSpi_IntrGetStatus(InstancePtr);
+	printf("XSpi_Transfer_SkipCheck 6.01 IntStatusReg %X\n", StatusReg);	
+	fflush(stdout);
+
+
+	while (((StatusReg & XSP_SR_TX_FULL_MASK) == 0) &&
+		(InstancePtr->RemainingBytes > 0)) {
+		if (DataWidth == XSP_DATAWIDTH_BYTE) {
+			/*
+			 * Data Transfer Width is Byte (8 bit).
+			 */
+			Data = *InstancePtr->SendBufferPtr;
+		} else if (DataWidth == XSP_DATAWIDTH_HALF_WORD) {
+			/*
+			 * Data Transfer Width is Half Word (16 bit).
+			 */
+			Data = *(u16 *)InstancePtr->SendBufferPtr;
+		} else if (DataWidth == XSP_DATAWIDTH_WORD){
+			/*
+			 * Data Transfer Width is Word (32 bit).
+			 */
+			Data = *(u32 *)InstancePtr->SendBufferPtr;
+		}
+
+		XSpi_PciWriteReg(InstancePtr, XSP_DTR_OFFSET, Data);
+		printf("%X ", Data);		
+		InstancePtr->SendBufferPtr += (DataWidth >> 3);
+		InstancePtr->RemainingBytes -= (DataWidth >> 3);
+		StatusReg = XSpi_GetStatusReg(InstancePtr);
+	}
+	printf(" End data\n");		
+
+	printf("XSpi_Transfer_SkipCheck 7\n");			
+	fflush(stdout);
+	/*
+	 * Set the slave select register to select the device on the SPI before
+	 * starting the transfer of data.
+	 */
+	XSpi_SetSlaveSelectReg(InstancePtr,
+				InstancePtr->SlaveSelectReg);
+				
+	/*
+	 * Start the transfer by no longer inhibiting the transmitter and
+	 * enabling the device. For a master, this will in fact start the
+	 * transfer, but for a slave it only prepares the device for a transfer
+	 * that must be initiated by a master.
+	 */
+	ControlReg = XSpi_GetControlReg(InstancePtr);
+	ControlReg &= ~XSP_CR_TRANS_INHIBIT_MASK;
+	XSpi_SetControlReg(InstancePtr, ControlReg);
+	printf("XSpi_Transfer_SkipCheck 8 ControlReg %X SlaveSelectReg %X\n", ControlReg, InstancePtr->SlaveSelectReg);	
+	fflush(stdout);
+	
+	StatusReg = XSpi_IntrGetStatus(InstancePtr);
+	printf("XSpi_Transfer_SkipCheck 8.01 IntStatusReg %X\n", StatusReg);	
+	fflush(stdout);
+
 
 	return XST_SUCCESS;
 }

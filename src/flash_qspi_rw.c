@@ -190,6 +190,8 @@ int qspi_ease_entire_flash (void);
 int qspi_erase_sector_flash (u32 OfsetAddr, u32 SectCount);
 int qspi_flash_erase_main (u32 OfsetAddr, u32 SectCount );
 int SpiFlashReadID(XSpi *SpiPtr);
+int SpiFlashReadRegister(XSpi *SpiPtr, unsigned int addRegister, unsigned int byteCount);
+int SpiFlashReadRegisterNoWriteEnable(XSpi *SpiPtr, unsigned int addRegister, unsigned int byteCount);
 int Spi_Blank_Check(u32 StartAddr, u32 NoByteToRead);
 int qspi_program_flash (u32 StartAddr, u32 NoOfPage);
 int qspi_readback_flash(u32 StartAddr,  u32 NoByteToRead);
@@ -301,7 +303,7 @@ int main(void)
 					fflush(stdout);
 					qspi_flash_geo();
 					printf("\n\rPress any Key to Main Menu\r\n");
-					fflush(stdout);
+					fflush(stdout);					
 					inbyte();
 				}
 				break;
@@ -343,34 +345,40 @@ int main(void)
 					break;
 				}
 			case 4:
+			{
 						printf("\r\nProgram/Verify (*.bin)\r\n");
 						printf("\n\r\tProgramming Start Address (hex): ");
+						int StartAddr = 0;
+						int NoByteToRead = 0;
+						/*input_deci_data = read_rs232 (&hex, nbytes_temp);
+						if (input_deci_data !=0)
+						{
+							StartAddr = convertToDecimal(&hex);
+							printf("\n\r\tNumber Of Bytes in BIN File(hex): ");
+							input_deci_data =0;
+						} 
+						else
+						{
+							printf("\n\rWrong Hex Address Entered\r\n");
+							inbyte();
+							break;
+						}
 						input_deci_data = read_rs232 (&hex, nbytes_temp);
 						if (input_deci_data !=0)
-								{
-									StartAddr = convertToDecimal(&hex);
-									printf("\n\r\tNumber Of Bytes in BIN File(hex): ");
-									input_deci_data =0;
-								}else
-									{
-										printf("\n\rWrong Hex Address Entered\r\n");
-										inbyte();
-										break;
-									}
-						input_deci_data = read_rs232 (&hex, nbytes_temp);
-						if (input_deci_data !=0)
-								{
-									NoByteToRead = convertToDecimal(&hex);
-										if (NoByteToRead <=0)
-											{
-												NoByteToRead = BINFILESIZE;
-												input_deci_data =0;
-											}
-											else 	Status = DownloadSerialDataToQSPIFlash(StartAddr, NoByteToRead);
-									}
+						{
+							NoByteToRead = convertToDecimal(&hex);
+							if (NoByteToRead <=0)
+							{
+								NoByteToRead = BINFILESIZE;
+								input_deci_data =0;
+							}
+							else 	Status = DownloadSerialDataToQSPIFlash(StartAddr, NoByteToRead);
+						}*/
+						Status = DownloadSerialDataToQSPIFlash(StartAddr, NoByteToRead);
 						printf("\n\r\n\rPress any Key to Main Menu\r\n");
 						inbyte();
 						break;
+			}
 			case 5:
 				{
 					printf ("\n\r\n\rRead Quad SPI flash:");
@@ -627,6 +635,7 @@ int Spi_Blank_Check(u32 StartAddr, u32 NoByteToRead)
 									ReadBuffer[Index] = 0x0;
 								}
 						Status = SpiFlashRead(&Spi, StartOffsetAddr, PAGE_SIZE, COMMAND_4BYTE_QUAD_OUTPUT_FAST_READ);
+						//Status = SpiFlashRead(&Spi, StartOffsetAddr, PAGE_SIZE, COMMAND_4BYTE_QUAD_OUTPUT_FAST_READ);
 								if(Status != XST_SUCCESS) {
 										return XST_FAILURE;
 										}
@@ -796,8 +805,33 @@ int qspi_flash_geo(void)
 		fflush(stdout);
 		return XST_FAILURE;
 	}
-	printf("qspi_flash_geo 4 Status %X\n", Status);
+	int FlagStatus = SpiFlashReadflagstatus(&Spi);	
+	printf("qspi_flash_geo 4 Status 0x%X flagStatus 0x%x\n", Status, FlagStatus);
 	fflush(stdout);
+
+	Status = SpiFlashQuadEnable(&Spi);
+	if (Status != XST_SUCCESS) {
+		printf("qspi_flash_geo 4.1 SpiFlashQuadEnable failed status 0x%X\n", Status);
+		return XST_FAILURE;		
+	}
+
+//	int regAddr = 0x0B;
+//	int regSize = 2;
+
+//	int readData = SpiFlashReadRegister(&Spi, regAddr, regSize);
+//	printf("qspi_flash_geo 4.1 Status 0x%X regaddr 0x%X Bytecount %d regData 0x%X\n", Status, regAddr, regSize, readData);
+//	fflush(stdout);
+//	regSize = 2;
+//	readData = SpiFlashReadRegister(&Spi, regAddr, regSize);
+//	printf("qspi_flash_geo 4.2 Status 0x%X regaddr 0x%X Bytecount %d regData 0x%X\n", Status, regAddr, regSize, readData);
+//	fflush(stdout);
+//	regSize = 4;
+//	readData = SpiFlashReadRegister(&Spi, regAddr, regSize);
+//	printf("qspi_flash_geo 4.3 Status 0x%X regaddr 0x%X Bytecount %d regData 0x%X\n", Status, regAddr, regSize, readData);
+//	fflush(stdout);
+//	readData = SpiFlashGetStatus(&Spi);
+//	printf("qspi_flash_geo 6 flashStatus regData 0x%X\n", readData);
+//	fflush(stdout);
 	return XST_SUCCESS;
 }
 /*****************************************************************************/
@@ -817,6 +851,7 @@ int qspi_read_flash(u32 StartAddr, u32 NoByteToRead)
 	int Status, CntLine =0;
 	u32 Index;
 	int remaind_int, NoOfPage=0, NoOfPage_strt=0, NoOfPage_tot=0;
+	printf ("* qspi_read_flash 1 startAddr 0x%X ByteToRead 0x%X\n", StartAddr, NoByteToRead);
 	if (qspi_init_flag ==0)
 		{
 			Status = System_init_startup ();
@@ -825,62 +860,70 @@ int qspi_read_flash(u32 StartAddr, u32 NoByteToRead)
 					} else qspi_init_flag=1;
 
 			}
-				printf ("\n\r\n\rPerforming Flash Read Operation...\r\n");
-				printf ("\n\rFlash Start Address:\t0x");putnum(StartAddr);
-				printf ("\n\rFlash End Address:\t0x");putnum((NoByteToRead +StartAddr));
+			printf ("\n\r\n\rPerforming Flash Read Operation...\r\n");
+			printf ("\n\rFlash Start Address:\t0x");putnum(StartAddr);
+			printf ("\n\rFlash End Address:\t0x");putnum((NoByteToRead +StartAddr));
 
-				NoOfPage = (NoByteToRead/PAGE_SIZE);
-				remaind_int = (NoByteToRead - ( NoOfPage * PAGE_SIZE));
-				  if (remaind_int != 0) {
-								   NoOfPage = (NoOfPage+1);
-								}
-				  if ( StartAddr !=0x00000)
-				  	  {
-					  	  NoOfPage_strt = (StartAddr/PAGE_SIZE);
-					  	  remaind_int = (StartAddr -(NoOfPage_strt * PAGE_SIZE));
-					  	if (remaind_int != 0)
-					  			{
-					  				NoOfPage_strt = (NoOfPage_strt+1);
-					  			}
-					  	NoOfPage_tot = NoOfPage_strt + NoOfPage;
-				  	  }
-				  	  if ( (StartAddr==0x000000) || (NoOfPage_tot<=NOB_PAGES))
-							  {
-								  printf("\n\rOffset(h):\t0x00\t0x01\t0x02\t0x03\t0x04\t0x05\t0x06\t0x07\n\r");
-								  CntLine =0;
-								  Index =0;
-								  printf("\n\r0x%08x:\t", (StartAddr));
+			NoOfPage = (NoByteToRead/PAGE_SIZE);
+			remaind_int = (NoByteToRead - ( NoOfPage * PAGE_SIZE));
+			if (remaind_int != 0) {
+				NoOfPage = (NoOfPage+1);
+			}
+			if ( StartAddr !=0x00000)
+			{
+				NoOfPage_strt = (StartAddr/PAGE_SIZE);
+				remaind_int = (StartAddr -(NoOfPage_strt * PAGE_SIZE));
+				if (remaind_int != 0)
+				{
+					NoOfPage_strt = (NoOfPage_strt+1);
+				}
+				NoOfPage_tot = NoOfPage_strt + NoOfPage;
+			}
+			if ( (StartAddr==0x000000) || (NoOfPage_tot<=NOB_PAGES))
+			{
+				printf("\n\rOffset(h):\t0x00\t0x01\t0x02\t0x03\t0x04\t0x05\t0x06\t0x07\n\r");
+				CntLine =0;
+				Index =0;
+				printf("\n\r0x%08x:\t", (StartAddr));
 
-										while  (NoOfPage !=0 )
-												{
-													Status = SpiFlashWriteEnable(&Spi);
-													if(Status != XST_SUCCESS) {
-																}
-													for(Index = 0; Index < (PAGE_SIZE + READ_WRITE_EXTRA_BYTES); Index++)
-														{
-																ReadBuffer[Index] = 0x0;
-															}
-													Status = SpiFlashRead(&Spi, StartAddr, PAGE_SIZE, COMMAND_4BYTE_QUAD_OUTPUT_FAST_READ);
-															if(Status != XST_SUCCESS) {
-																	return XST_FAILURE;
-																	}
-															for(Index = 5; Index <= ((PAGE_SIZE + READ_WRITE_EXTRA_BYTES)); Index++)
-																			{
-																				printf("0x%02x\t", (ReadBuffer[Index + READ_WRITE_EXTRA_BYTES]));
-																				if (CntLine > 6)
-																				{
-																					CntLine =0;
-																					printf("\n\r0x%08x:\t", (StartAddr + (Index-4)) );
-																				} else CntLine++;
-																			}
-																				NoOfPage--;
-																				StartAddr = (StartAddr + PAGE_SIZE);
-												}
-							  	  }
-				  	  	  	  	  else
-										  {
-											  printf ("\n\rNumber of Pages Excced the device settings!");
-										  }
+				while  (NoOfPage !=0 )
+				{
+					printf ("* qspi_read_flash 2 NoOfPage %d\n", NoOfPage);
+					fflush(stdout);
+					Status = SpiFlashWriteEnable(&Spi);
+					if(Status != XST_SUCCESS) {
+						return XST_FAILURE;
+					}
+					for(Index = 0; Index < (PAGE_SIZE + READ_WRITE_EXTRA_BYTES); Index++)
+					{
+						ReadBuffer[Index] = 0x0;
+					}
+					printf ("* qspi_read_flash 2.1 NoOfPage %d\n", NoOfPage);
+					fflush(stdout);
+					// Status = SpiFlashRead(&Spi, StartAddr, PAGE_SIZE, COMMAND_RANDOM_READ);
+					Status = SpiFlashRead(&Spi, StartAddr, PAGE_SIZE, COMMAND_4BYTE_QUAD_OUTPUT_FAST_READ);
+					printf ("* qspi_read_flash 2.2 NoOfPage %d Status 0x%X\n", NoOfPage, Status);
+					fflush(stdout);
+					if(Status != XST_SUCCESS) {
+						return XST_FAILURE;
+					}
+					for(Index = 5; Index <= ((PAGE_SIZE + READ_WRITE_EXTRA_BYTES)); Index++)
+					{
+						printf("0x%02x\t", (ReadBuffer[Index + READ_WRITE_EXTRA_BYTES]));
+						if (CntLine > 6)
+						{
+							CntLine =0;
+							printf("\n\r0x%08x:\t", (StartAddr + (Index-4)) );
+						} else CntLine++;
+					}
+					NoOfPage--;
+					StartAddr = (StartAddr + PAGE_SIZE);
+				}
+			}
+			else
+			{
+				printf ("\n\rNumber of Pages Excced the device settings!");
+			}
 
 		return XST_SUCCESS;
 }
@@ -898,33 +941,33 @@ int qspi_read_flash(u32 StartAddr, u32 NoByteToRead)
 ******************************************************************************/
 int SpiFlashWriteEnable(XSpi *SpiPtr)
 {
-	printf("SpiFlashWriteEnable 1\n");		
+//	printf("SpiFlashWriteEnable 1\n");		
 	int Status;
 	Status = SpiFlashWaitForFlashReady();
-	printf("SpiFlashWriteEnable 2\n");
-	fflush(stdout);
+//	printf("SpiFlashWriteEnable 2\n");
+//	fflush(stdout);
 	if(Status != XST_SUCCESS) {
-		printf("SpiFlashWriteEnable 2.5\n");		
+//		printf("SpiFlashWriteEnable 2.5\n");		
 		return XST_FAILURE;
 	} 
-	printf("SpiFlashWriteEnable 3\n");			
-	fflush(stdout);
+//	printf("SpiFlashWriteEnable 3\n");			
+//	fflush(stdout);
 	WriteBuffer[BYTE1] = COMMAND_WRITE_ENABLE;
 	TransferInProgress = TRUE;
 	Status = XSpi_Transfer(SpiPtr, WriteBuffer, NULL,
 				WRITE_ENABLE_BYTES);
-	printf("SpiFlashWriteEnable 4 status %d\n", Status);			
+//	printf("SpiFlashWriteEnable 4 status %d\n", Status);			
 	if(Status != XST_SUCCESS) {
-		printf("SpiFlashWriteEnable 4.5 status %d\n", Status);			
+//		printf("SpiFlashWriteEnable 4.5 status %d\n", Status);			
 		return XST_FAILURE;
 	} else {
 		TransferInProgress = FALSE;  //tli, We are in polled mode, if exit from XSpi_Transfer with XST_SUCCESS clear this flag
 	}
 	while(TransferInProgress);
-	printf("SpiFlashWriteEnable 5 TransferInProgress %d \n", TransferInProgress);			
+//	printf("SpiFlashWriteEnable 5 TransferInProgress %d \n", TransferInProgress);			
 	if(ErrorCount != 0) {
 		ErrorCount = 0;
-		printf("SpiFlashWriteEnable 5 TransferInProgress %d ErrorCount %d\n", TransferInProgress, ErrorCount);			
+//		printf("SpiFlashWriteEnable 5 TransferInProgress %d ErrorCount %d\n", TransferInProgress, ErrorCount);			
 		return XST_FAILURE;
 	}
 	return XST_SUCCESS;
@@ -986,9 +1029,9 @@ int SpiFlash4bytemodeEnable(XSpi *SpiPtr)
 	int Status;
 
 	Status = SpiFlashWriteEnable(&Spi);
-		if(Status != XST_SUCCESS) {
-			return XST_FAILURE;
-		}
+	if(Status != XST_SUCCESS) {
+		return XST_FAILURE;
+	}
 	/*
 	 * Wait while the Flash is busy.
 	 */
@@ -1000,7 +1043,8 @@ int SpiFlash4bytemodeEnable(XSpi *SpiPtr)
 	/*
 	 * Prepare the COMMNAD_ENTER_4BYTE_ADDRESS_MODE.
 	 */
-	WriteBuffer[BYTE1] = COMMAND_ENTER_4BYTE_ADDRESS_MODE;
+	//WriteBuffer[BYTE1] = COMMAND_ENTER_4BYTE_ADDRESS_MODE;	
+	WriteBuffer[BYTE1] = 0xB7;	
 
 	/*
 	 * Initiate the Transfer.
@@ -1008,6 +1052,9 @@ int SpiFlash4bytemodeEnable(XSpi *SpiPtr)
 	TransferInProgress = TRUE;
 	Status = XSpi_Transfer(SpiPtr, WriteBuffer, NULL,
 				WRITE_ENABLE_BYTES);
+//	Status = XSpi_Transfer_SkipCheck(SpiPtr, WriteBuffer, NULL,
+//				WRITE_ENABLE_BYTES);
+
 	if(Status != XST_SUCCESS) {
 		return XST_FAILURE;
 	} else {
@@ -1151,6 +1198,7 @@ int SpiFlashReadflagstatus(XSpi *SpiPtr)
 	TransferInProgress = TRUE;
 	Status = XSpi_Transfer(SpiPtr, WriteBuffer, ReadBuffer,
 			READ_WRITE_EXTRA_BYTES);
+			
 	if(Status != XST_SUCCESS) {
 		return XST_FAILURE;
 	} else {
@@ -1164,6 +1212,73 @@ int SpiFlashReadflagstatus(XSpi *SpiPtr)
 		printf ("\n\rCOMMAND_READ_FLAG_STATUS: "); putnum(ReadBuffer[1]);
 	return XST_SUCCESS;
 }
+
+int SpiFlashReadRegister(XSpi *SpiPtr, unsigned int addRegister, unsigned int byteCount)
+{
+	int 	Status;
+	Status = SpiFlashWriteEnable(&Spi);
+	if(Status != XST_SUCCESS) {
+			return XST_FAILURE;
+	}
+	Status = SpiFlashWaitForFlashReady();
+		if(Status != XST_SUCCESS) {
+			return XST_FAILURE;
+		}
+
+	WriteBuffer[BYTE1] = addRegister;
+	TransferInProgress = TRUE;
+	Status = XSpi_Transfer(SpiPtr, WriteBuffer, ReadBuffer,
+			byteCount);
+			
+	if(Status != XST_SUCCESS) {
+		return XST_FAILURE;
+	} else {
+		TransferInProgress = FALSE;  //tli, We are in polled mode, if exit from XSpi_Transfer with XST_SUCCESS clear this flag
+	}
+	while(TransferInProgress);
+	if(ErrorCount != 0) {
+		ErrorCount = 0;
+		return XST_FAILURE;
+		}
+		printf ("\n\rCOMMAND_READ address 0x%X, data 0x%X\n", addRegister, putnum(ReadBuffer[1]));
+	return XST_SUCCESS;
+}
+
+int SpiFlashReadRegisterNoWriteEnable(XSpi *SpiPtr, unsigned int addRegister, unsigned int byteCount)
+{
+	int 	Status;
+/*	Status = SpiFlashWriteEnable(&Spi);
+	if(Status != XST_SUCCESS) {
+			return XST_FAILURE;
+	}
+*/
+
+/*	WriteBuffer[BYTE1] = COMMAND_ENTER_QUAD_MODE; //0x35;
+	TransferInProgress = TRUE;
+	Status = XSpi_Transfer(SpiPtr, WriteBuffer, ReadBuffer,
+						STATUS_READ_BYTES);*/
+
+
+	WriteBuffer[BYTE1] = addRegister;
+	TransferInProgress = TRUE;
+	Status = XSpi_Transfer(SpiPtr, WriteBuffer, ReadBuffer,
+			byteCount);
+
+			
+	if(Status != XST_SUCCESS) {
+		return XST_FAILURE;
+	} else {
+		TransferInProgress = FALSE;  //tli, We are in polled mode, if exit from XSpi_Transfer with XST_SUCCESS clear this flag
+	}
+	while(TransferInProgress);
+	if(ErrorCount != 0) {
+		ErrorCount = 0;
+		return XST_FAILURE;
+		}
+		printf ("\n\rCOMMAND_READ address 0x%X, data 0x%X\n", addRegister, putnum(ReadBuffer[1]));
+	return XST_SUCCESS;
+}
+
 /*****************************************************************************/
 /**
 *
@@ -1244,25 +1359,33 @@ int SpiFlashWrite_File(XSpi *SpiPtr, u32 Addr, u32 ByteCount, u8 WriteCmd, u32 d
 ******************************************************************************/
 int SpiFlashRead(XSpi *SpiPtr, u32 Addr, u32 ByteCount, u8 ReadCmd)
 {
+	printf("* SpiFlashRead 1 Addr 0x%X ByteCount 0x%X command 0x%X\n", Addr, ByteCount, ReadCmd);
+	fflush(stdout);
 	int Status;
 	Status = SpiFlash4bytemodeEnable(&Spi);
-			if (Status != XST_SUCCESS) {
-			return XST_FAILURE;
-		}
-		Status = SpiFlashWriteEnable(&Spi);
-				if(Status != XST_SUCCESS) {
-					return XST_FAILURE;
-			}
+	if (Status != XST_SUCCESS) {
+		return XST_FAILURE;
+	}
+	printf("* SpiFlashRead 2 Status 0x%X", Status);
+	fflush(stdout);
+	Status = SpiFlashWriteEnable(&Spi);
+	if(Status != XST_SUCCESS) {
+		return XST_FAILURE;
+	}
+	printf("* SpiFlashRead 3 Status 0x%X", Status);
+	fflush(stdout);
 
 	Status = SpiFlashWaitForFlashReady();
 	if(Status != XST_SUCCESS) {
 		return XST_FAILURE;
 	}
-		WriteBuffer[BYTE1] = ReadCmd;
-		WriteBuffer[BYTE2] = (u8) (Addr >> 24);
-		WriteBuffer[BYTE3] = (u8) (Addr >> 16);
-		WriteBuffer[BYTE4] = (u8) (Addr >> 8);
-		WriteBuffer[BYTE5] = (u8) Addr;
+	printf("* SpiFlashRead 4 Status 0x%X", Status);
+	fflush(stdout);	
+	WriteBuffer[BYTE1] = ReadCmd;
+	WriteBuffer[BYTE2] = (u8) (Addr >> 24);
+	WriteBuffer[BYTE3] = (u8) (Addr >> 16);
+	WriteBuffer[BYTE4] = (u8) (Addr >> 8);
+	WriteBuffer[BYTE5] = (u8) Addr;
 
 	if (ReadCmd == COMMAND_DUAL_READ) {
 		ByteCount += DUAL_READ_DUMMY_BYTES;
@@ -1276,6 +1399,8 @@ int SpiFlashRead(XSpi *SpiPtr, u32 Addr, u32 ByteCount, u8 ReadCmd)
 		ByteCount += QUAD_IO_READ_DUMMY_BYTES;
 	}
 
+	printf("* SpiFlashRead 5 WriteBuffer 0x%X %X %X %X %X ByteCount %d", WriteBuffer[BYTE1], WriteBuffer[BYTE2], WriteBuffer[BYTE3], WriteBuffer[BYTE4], WriteBuffer[BYTE5], ByteCount);
+	fflush(stdout);	 
 
 	TransferInProgress = TRUE;
 	Status = XSpi_Transfer( SpiPtr, WriteBuffer, ReadBuffer,
@@ -1290,6 +1415,8 @@ int SpiFlashRead(XSpi *SpiPtr, u32 Addr, u32 ByteCount, u8 ReadCmd)
 		ErrorCount = 0;
 		return XST_FAILURE;
 	}
+	printf("* SpiFlashRead 6\n");
+	fflush(stdout);
 	Status = SpiFlash4byteexit(&Spi);
 			if (Status != XST_SUCCESS) {
 					return XST_FAILURE;
@@ -1530,7 +1657,8 @@ int SpiFlashReadID(XSpi *SpiPtr)
 	}
 	printf("SpiFlashReadID 2 Status %X\n", Status);
 	fflush(stdout);
-	WriteBuffer[BYTE1] = COMMAND_READ_ID;
+	// WriteBuffer[BYTE1] = COMMAND_READ_ID;
+	WriteBuffer[BYTE1] = 0x9F;
 	TransferInProgress = TRUE;
 	Status = XSpi_Transfer(SpiPtr, WriteBuffer, ReadBuffer,
 			READ_WRITE_EXTRA_BYTES);
@@ -1625,8 +1753,8 @@ int SpiFlashReadID(XSpi *SpiPtr)
 ******************************************************************************/
 int SpiFlashGetStatus(XSpi *SpiPtr)
 {
-	printf("SpiFlashGetStatus 1\n");
-	fflush(stdout);
+//	printf("SpiFlashGetStatus 1\n");
+//	fflush(stdout);
 	int Status;
 
 	WriteBuffer[BYTE1] = COMMAND_STATUSREG_READ;
@@ -1634,11 +1762,11 @@ int SpiFlashGetStatus(XSpi *SpiPtr)
 	TransferInProgress = TRUE;
 	Status = XSpi_Transfer(SpiPtr, WriteBuffer, ReadBuffer,
 						STATUS_READ_BYTES);
-	printf("SpiFlashGetStatus 2 Status %X TransferInProgress %d\n", Status, TransferInProgress);
-	fflush(stdout);
+//	printf("SpiFlashGetStatus 2 Status %X TransferInProgress %d\n", Status, TransferInProgress);
+//	fflush(stdout);
 	if(Status != XST_SUCCESS) {
-		printf("SpiFlashGetStatus 2.1 Status failed %X\n", Status);
-		fflush(stdout);
+//		printf("SpiFlashGetStatus 2.1 Status failed %X\n", Status);
+//		fflush(stdout);
 		return XST_FAILURE;
 	} else {
 		TransferInProgress = FALSE;  //tli, We are in polled mode, if exit from XSpi_Transfer with XST_SUCCESS clear this flag
@@ -1647,8 +1775,8 @@ int SpiFlashGetStatus(XSpi *SpiPtr)
 	while(TransferInProgress);
 	if(ErrorCount != 0) {
 		ErrorCount = 0;
-		printf("SpiFlashGetStatus 2.2 ErrorCount %X failed TransferInProgress %d\n", ErrorCount, TransferInProgress);
-		fflush(stdout);
+//		printf("SpiFlashGetStatus 2.2 ErrorCount %X failed TransferInProgress %d\n", ErrorCount, TransferInProgress);
+//		fflush(stdout);
 		return XST_FAILURE;
 	}
 
@@ -1656,6 +1784,7 @@ int SpiFlashGetStatus(XSpi *SpiPtr)
 	fflush(stdout);
 	return XST_SUCCESS;
 }
+
 /*****************************************************************************/
 /**
 *
@@ -1787,24 +1916,24 @@ static int  DownloadSerialDataToQSPIFlash(u32 StartAddr, u32 NoByteToRead)
 		printf("\r\n\tWaiting for the file to be sent from TeraTerm...\n\r");
 		FileByteCount = TeraTermFile_Receive(StartAddr, NoByteToRead);
 
-		  printf("\r\nTotalByteRecived =\t"); putnum(FileByteCount);
-		  printf ("\r\nFlashAddress Offset = \t"); putnum(StartAddr);
+		printf("\r\nTotalByteRecived =\t"); putnum(FileByteCount);
+		printf ("\r\nFlashAddress Offset = \t"); putnum(StartAddr);
 
-		  NoOfSector = (FileByteCount/BYTE_PER_SECTOR);
-		  NoOfPage = (FileByteCount/PAGE_SIZE);
+		NoOfSector = (FileByteCount/BYTE_PER_SECTOR);
+		NoOfPage = (FileByteCount/PAGE_SIZE);
 
-		  quq_int = (FileByteCount / BYTE_PER_SECTOR);
-		  remaind_int = (FileByteCount - (quq_int * BYTE_PER_SECTOR));
+		quq_int = (FileByteCount / BYTE_PER_SECTOR);
+		remaind_int = (FileByteCount - (quq_int * BYTE_PER_SECTOR));
 
-		  if (remaind_int != 0) {
+		if (remaind_int != 0) {
 				  NoOfSector = (NoOfSector +1);
-				  }
-		  quq_int = (FileByteCount / PAGE_SIZE);
-		  remaind_int = (FileByteCount - ( quq_int * PAGE_SIZE));
+		}
+		quq_int = (FileByteCount / PAGE_SIZE);
+		remaind_int = (FileByteCount - ( quq_int * PAGE_SIZE));
 
-		  if (remaind_int != 0) {
-				   NoOfPage = (NoOfPage+1);
-				}
+		if (remaind_int != 0) {
+			NoOfPage = (NoOfPage+1);
+		}
 
 		  printf ("\r\nNoOfSector= "); putnum(NoOfSector);
 		  printf ("\r\nNoOfPage= "); putnum(NoOfPage);
@@ -1830,13 +1959,12 @@ int qspi_program_flash(u32 StartAddr,u32 NoOfPage)
 		u32 ddrvector=0;
 		int Status;
 		if (qspi_init_flag ==0)
-					{
-						Status = System_init_startup ();
-						if (Status != XST_SUCCESS) {
-									return XST_FAILURE;
-								} else qspi_init_flag=1;
-
-						}
+		{
+			Status = System_init_startup ();
+			if (Status != XST_SUCCESS) {
+				return XST_FAILURE;
+			} else qspi_init_flag=1;
+		}
 		Status = XSpi_SetSlaveSelect(&Spi, SPI_SELECT);
 		if(Status != XST_SUCCESS) {
 			return XST_FAILURE;
@@ -1849,21 +1977,21 @@ int qspi_program_flash(u32 StartAddr,u32 NoOfPage)
 		}
 
 		while (NoOfPage !=0)
-				{
-						Status = SpiFlashWriteEnable(&Spi);
-							if(Status != XST_SUCCESS) {
-								return XST_FAILURE;
-							}
-					Status = SpiFlashWrite_File(&Spi, StartAddr, PAGE_SIZE, COMMAND_4BYTE_PAGE_PROGRAM, ddrvector);
-										if(Status != XST_SUCCESS) {
-											return XST_FAILURE;
-										} else
-										{
-												NoOfPage--;
-												StartAddr = (StartAddr + PAGE_SIZE);
-												ddrvector = (ddrvector + PAGE_SIZE);
-										}
+		{
+			Status = SpiFlashWriteEnable(&Spi);
+			if(Status != XST_SUCCESS) {
+				return XST_FAILURE;
 			}
+			Status = SpiFlashWrite_File(&Spi, StartAddr, PAGE_SIZE, COMMAND_4BYTE_PAGE_PROGRAM, ddrvector);
+			if(Status != XST_SUCCESS) {
+				return XST_FAILURE;
+			} else
+			{
+				NoOfPage--;
+				StartAddr = (StartAddr + PAGE_SIZE);
+				ddrvector = (ddrvector + PAGE_SIZE);
+			}
+		}
 		return XST_SUCCESS;
 }
 /*****************************************************************************/
