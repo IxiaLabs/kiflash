@@ -2042,6 +2042,7 @@ int qspi_program_flash(u32 StartAddr)
 		printf ("*qspi_program_flash 3 NoOfPage %d StartAddr 0x%X\n", NoOfPage, StartAddr);
 		fflush(stdout);
 
+		/*
 		while (NoOfPage !=0)
 		{
 			printf ("*qspi_program_flash 3.1 NoOfPage %d\n", NoOfPage);
@@ -2053,16 +2054,16 @@ int qspi_program_flash(u32 StartAddr)
 			uint32_t progAddress = StartAddr;
 			int sumStatus;
 			buffer = (unsigned char *)malloc((16 + 2) * sizeof(unsigned char)); // Enough memory for file + \0
-
 			for(int i = 0; i< 16+2; i++)
 			{
 				char hex[5];
 				sprintf(hex, "%x", i);
 				buffer[i] = hex;
 			}
+			
 			printf ("*qspi_program_flash 3.12 NoOfPage %d\n", NoOfPage);
 			fflush(stdout);
-
+			
 			for( int i = 0; i < 16; i++)			
 			{
 				progAddress = StartAddr + i*16;
@@ -2096,8 +2097,9 @@ int qspi_program_flash(u32 StartAddr)
 					// pageBuffer = (pageBuffer + PAGE_SIZE);
 			}
 
-		}		
-/*		
+		}
+		*/		
+
 		while (NoOfPage !=0)
 		{
 			printf ("*qspi_program_flash 3.1 NoOfPage %d\n", NoOfPage);
@@ -2109,7 +2111,15 @@ int qspi_program_flash(u32 StartAddr)
 			buffer = (unsigned char *)malloc((PAGE_SIZE + 10) * sizeof(unsigned char)); // Enough memory for file + \0
 			printf ("*qspi_program_flash 3.12 NoOfPage %d\n", NoOfPage);
 			fflush(stdout);
+		
 			fread(buffer, 1, PAGE_SIZE, fp); // Read in the entire file
+			for(int i = 0; i< 16+2; i++)
+			{
+				char hex[5];
+				sprintf(hex, "%x", i);
+				buffer[i] = hex;
+			}	
+
 			printf("Here is the message:n\n");
 			for (int i = 0; i < PAGE_SIZE; i++)
 			{
@@ -2134,7 +2144,7 @@ int qspi_program_flash(u32 StartAddr)
 				// pageBuffer = (pageBuffer + PAGE_SIZE);
 			}
 		}
-*/
+
 		fclose(fp); // Close the file
 		return XST_SUCCESS;
 }
