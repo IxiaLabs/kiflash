@@ -589,7 +589,7 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 	u32 Data = 0;
 	u8  DataWidth;
 
-//	printf("XSpi_Transfer 1\n");
+//	printf("XSpi_Transfer 1 bytecount %d\n", ByteCount);
 //	fflush(stdout);
 	if(SendBufPtr == NULL || InstancePtr == NULL || ByteCount == 0 || InstancePtr->IsReady != XIL_COMPONENT_IS_READY) {
 		printf("XSpi_Transfer 1.5\n");
@@ -940,8 +940,8 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 					InstancePtr->SlaveSelectMask);
 		InstancePtr->IsBusy = FALSE;
 
-		printf("XSpi_Transfer 10 succeeded in transfer\n");	
-		fflush(stdout);
+// 		printf("XSpi_Transfer 10 succeeded in transfer\n");	
+//		fflush(stdout);
 	}
 
 	return XST_SUCCESS;
