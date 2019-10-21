@@ -2112,13 +2112,14 @@ int qspi_program_flash(u32 StartAddr)
 			printf ("*qspi_program_flash 3.12 NoOfPage %d\n", NoOfPage);
 			fflush(stdout);
 		
-			fread(buffer, 1, PAGE_SIZE, fp); // Read in the entire file
+/*			fread(buffer, 1, PAGE_SIZE, fp); // Read in the entire file
 			for(int i = 0; i< 16+2; i++)
 			{
 				char hex[5];
 				sprintf(hex, "%x", i);
 				buffer[i] = hex;
 			}	
+*/			
 
 			printf("Here is the message:n\n");
 			for (int i = 0; i < PAGE_SIZE; i++)
