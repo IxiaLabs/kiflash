@@ -130,11 +130,14 @@
  * Number of bytes per page in the flash device.
  */
 #define PAGE_SIZE					256
-#define NUMB_SECTORS				512
+// #define NUMB_SECTORS				512
+#define NUMB_SECTORS				512 * 2
 #define	BYTE_PER_SECTOR				65536
-#define	NUMB_SUBSECTORS				8192
+// #define	NUMB_SUBSECTORS				8192
+#define	NUMB_SUBSECTORS				8192 * 2
 #define	BYTE_PER_SUBSECTOR			4096
-#define NOB_PAGES					131072
+// #define NOB_PAGES					131072
+#define NOB_PAGES 					262144
 /*
  * Address of the page to perform Erase, Write and Read operations.
  */
