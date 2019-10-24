@@ -604,7 +604,7 @@ int icap()
 {
 	printf("\n icap \n\r");
 	uint64_t icapBaseAddr = 0x00070000;
-	uint32_t icapWriteFifo = 0x0220;
+	uint32_t icapWriteFifo = 0x0200;
 	uint32_t icapWriteControl = 0x0218;
 	// write IPROG command sequence
 	PciWriteReg(&Spi, icapBaseAddr, icapWriteFifo, 0xFFFFFFFF);
