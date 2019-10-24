@@ -200,8 +200,8 @@ int Spi_Blank_Check(u32 StartAddr, u32 NoByteToRead);
 int qspi_program_flash (u32 StartAddr);
 int qspi_readback_flash(u32 StartAddr,  u32 NoByteToRead);
 unsigned int convertToDecimal(char const* hexstring);
-static int  DownloadSerialDataToQSPIFlash(u32 StartAddr, u32 NoByteToRead);
-static int  VerifySerialDataToQSPIFlash(u32 StartAddr, u32 NoByteToRead);
+static int  DownloadSerialDataToQSPIFlash(u32 StartDie);
+static int  VerifySerialDataToQSPIFlash(u32 StartDie);
 static int TeraTermFile_Receive ( u32 StartAddr,u32 NoByteToRead);
 int read_rs232 (char* buf, int nbytes);
 void TimerCounterHandler(void *CallBackRef, u8 TmrCtrNumber);
@@ -282,8 +282,6 @@ int main(void)
 		while(exit_flag != 1) {
 			// printf("%c[2J",27);
 			printf("\n\r*******************************************************************");
-			printf("\n\r************** XAPP1280 (V1.0): UltraScale FPGA *******************");
-			printf("\n\r***Post-Configuration Access of SPI Flash Memory using STARTUPE3***");
 			printf("\n\r*******************************************************************\n\r");
     		printf("\n\rChoose from options below: \r\n");
     	    printf("1: Read Quad SPI flash ID\r\n");
@@ -293,9 +291,8 @@ int main(void)
     	    printf("5: Read Quad SPI flash\r\n");
 			printf("6: Check Flag Status\r\n");
 			printf("7: Enable Quad\r\n");
-			printf("8: Verify (*.bin)\r\n");
-			printf("9: Erase Quad SPI flash 1\r\n");
-			printf("10: ICAP\r\n");
+			printf("8: Verify (*.bin)\r\n");			
+			printf("9: ICAP\r\n");
 			fflush(stdout);
 			int choice;
     	    // choice = inbyte();
@@ -319,7 +316,12 @@ int main(void)
 				}
 				case 2:
 				{
-					qspi_flash_erase_main(Address, 0);
+					printf("\n\rDie number to erase (0-3): ");					
+					int input_deci_data;    	    		
+					scanf("%d", &input_deci_data);
+					printf("You entered: %d\n", input_deci_data);
+									
+					qspi_flash_erase_main(Address, input_deci_data);
 					break;
 				}
 				case 3:
@@ -365,14 +367,14 @@ int main(void)
 				}
 				case 4:
 				{
-					printf("\r\nProgram/Verify (*.bin)\r\n");
-					printf("\n\r\tProgramming Start Address (hex): ");
-//		Status = SpiFlashQuadEnable(&Spi);
-//		if (Status != XST_SUCCESS) {
-//			return XST_FAILURE;
-//		}						
-					int StartAddr = 0;
-					int NoByteToRead = 0;
+					printf("\r\nProgram (*.bin)\r\n");
+					printf("\n\rDie number to program (0-3): ");					
+					int input_deci_data;    	    		
+					scanf("%d", &input_deci_data);
+					printf("You entered: %d\n", input_deci_data);
+					
+					
+				
 						/*input_deci_data = read_rs232 (&hex, nbytes_temp);
 						if (input_deci_data !=0)
 						{
@@ -397,7 +399,7 @@ int main(void)
 							}
 							else 	Status = DownloadSerialDataToQSPIFlash(StartAddr, NoByteToRead);
 						}*/						
-					Status = DownloadSerialDataToQSPIFlash(StartAddr, NoByteToRead);
+					Status = DownloadSerialDataToQSPIFlash(input_deci_data);
 					printf("\n\r\n\rPress any Key to Main Menu\r\n");
 					inbyte();
 					break;
@@ -453,21 +455,16 @@ int main(void)
 				case 8:
 				{
 					printf("\r\nVerify (*.bin)\r\n");
-					printf("\n\r\tProgramming Start Address (hex): ");
-				
-					int StartAddr = 0;
-					int NoByteToRead = 0;
-					Status = VerifySerialDataToQSPIFlash(StartAddr, NoByteToRead);
+					printf("\n\rDie number to Verify (0-3): ");					
+					int input_deci_data;    	    		
+					scanf("%d", &input_deci_data);
+					printf("You entered: %d\n", input_deci_data);
+					Status = VerifySerialDataToQSPIFlash(input_deci_data);
 					printf("\n\r\n\rPress any Key to Main Menu\r\n");
 					inbyte();
 					break;
 				}
 				case 9:
-				{
-					qspi_flash_erase_main(Address, 1);			
-					break;
-				}
-				case 10:
 				{
 					icap();			
 					break;
@@ -2165,20 +2162,20 @@ static int SetupInterruptSystem(XSpi *SpiPtr)
 * @note		None
 *
 ******************************************************************************/
-static int  DownloadSerialDataToQSPIFlash(u32 StartAddr, u32 NoByteToRead)
+static int  DownloadSerialDataToQSPIFlash(u32 StartDie)
 	{
 		  printf ("\r\nProgramming QSPI flash Start");
-		  qspi_program_flash(StartAddr);
+		  qspi_program_flash(StartDie);
 		  printf ("\r\nProgramming QSPI flash end");
 		  return XST_SUCCESS;
 	}
 
-static int  VerifySerialDataToQSPIFlash(u32 StartAddr, u32 NoByteToRead)
+static int  VerifySerialDataToQSPIFlash(u32 StartDie)
 	{
 		printf ("\r\nVerify QSPI flash Start\n");
 		fflush(stdout);
 
-		if( qspi_verify_flash(StartAddr) == XST_FAILURE ){
+		if( qspi_verify_flash(StartDie) == XST_FAILURE ){
 			printf ("\r\nVerify QSPI flash end\n");	
 			fflush(stdout);
 			return XST_FAILURE ;
@@ -2199,11 +2196,13 @@ static int  VerifySerialDataToQSPIFlash(u32 StartAddr, u32 NoByteToRead)
 * @note		None
 *
 ******************************************************************************/
-int qspi_program_flash(u32 StartAddr)
+int qspi_program_flash(u32 StartDie)
 {
 		int quq_int, remaind_int, NoOfSector, NoOfPage;
 		FILE* fp;
 		uint64_t FileByteCount;
+		u32 baseStartAddr = StartDie << 26;
+		u32 StartAddr = 0;
 		// printf("\r\n\tWaiting for the file to be sent from TeraTerm...\n\r");
 		//  FileByteCount = TeraTermFile_Receive(StartAddr, NoByteToRead);
 
@@ -2224,7 +2223,7 @@ int qspi_program_flash(u32 StartAddr)
 		fseek(fp, 0, SEEK_END);
 		FileByteCount = ftell(fp);
 		printf("\r\nFpga Download TotalByteRecived =\t"); putnum(FileByteCount);
-		printf ("\r\nFpga Download FlashAddress Offset = \t"); putnum(StartAddr);
+		printf ("\r\nFpga Download FlashAddress Offset = \t"); putnum(baseStartAddr);
 	    fflush(stdout);
 		
 
@@ -2271,7 +2270,7 @@ int qspi_program_flash(u32 StartAddr)
 		}
 
 		// char* pageBuffer = buffer;
-		printf ("*qspi_program_flash 3 NoOfPage %d StartAddr 0x%X\n", NoOfPage, StartAddr);
+		printf ("*qspi_program_flash 3 NoOfPage %d StartAddr 0x%X\n", NoOfPage, baseStartAddr);
 		fflush(stdout);
 
 		/*
@@ -2364,7 +2363,7 @@ int qspi_program_flash(u32 StartAddr)
 			if(Status != XST_SUCCESS) {
 				return XST_FAILURE;
 			}
-			Status = SpiFlashWrite_File(&Spi, StartAddr, PAGE_SIZE, COMMAND_4BYTE_PAGE_PROGRAM, buffer);
+			Status = SpiFlashWrite_File(&Spi, StartAddr + baseStartAddr, PAGE_SIZE, COMMAND_4BYTE_PAGE_PROGRAM, buffer);
 			printf ("*qspi_program_flash 3.3 NoOfPage %d", NoOfPage);
 			fflush(stdout);
 			if(Status != XST_SUCCESS) {
@@ -2381,11 +2380,13 @@ int qspi_program_flash(u32 StartAddr)
 		return XST_SUCCESS;
 }
 
-int qspi_verify_flash(u32 StartAddr)
+int qspi_verify_flash(u32 StartDie)
 {
 		int quq_int, remaind_int, NoOfSector, NoOfPage, Index;
 		FILE* fp;
 		uint64_t FileByteCount;
+		u32 baseStartAddr = StartDie << 26;
+		u32 StartAddr = 0;
 
 		char* filename = "/home/ixiaadmin/Downloads/ant4x400g.bin";
 		printf("\nqspi_verify_flash 1\n");					
@@ -2404,7 +2405,7 @@ int qspi_verify_flash(u32 StartAddr)
 		fseek(fp, 0, SEEK_END);
 		FileByteCount = ftell(fp);
 		printf("\r\nFpga Verify TotalByteRecived =\t"); putnum(FileByteCount);
-		printf ("\r\nFpga Verify FlashAddress Offset = \t"); putnum(StartAddr);
+		printf ("\r\nFpga Verify FlashAddress Offset = \t"); putnum(baseStartAddr);
 	    fflush(stdout);
 		
 
@@ -2452,7 +2453,7 @@ int qspi_verify_flash(u32 StartAddr)
 		}
 
 		// char* pageBuffer = buffer;
-		printf ("*qspi_verify_flash 3 NoOfPage %d StartAddr 0x%X\n", NoOfPage, StartAddr);
+		printf ("*qspi_verify_flash 3 NoOfPage %d StartAddr 0x%X\n", NoOfPage, baseStartAddr);
 		fflush(stdout);
 	
 
@@ -2487,7 +2488,7 @@ int qspi_verify_flash(u32 StartAddr)
 			{
 				ReadBuffer[Index] = 0x0;
 			}
-			Status = SpiFlashRead(&Spi, StartAddr, PAGE_SIZE, COMMAND_4BYTE_QUAD_OUTPUT_FAST_READ);
+			Status = SpiFlashRead(&Spi, baseStartAddr + StartAddr, PAGE_SIZE, COMMAND_4BYTE_QUAD_OUTPUT_FAST_READ);
 			if(Status != XST_SUCCESS) {
 				return XST_FAILURE;
 			}
