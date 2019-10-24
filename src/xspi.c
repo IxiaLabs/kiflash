@@ -317,6 +317,33 @@ uint64_t XSpi_PciReadReg(XSpi *InstancePtr, uint32_t address)
 	return returnValue;
 }
 
+void PciWriteReg(XSpi *InstancePtr, uint64_t baseAddr, uint32_t address, uint64_t data)
+{
+	if (InstancePtr->pci)
+	{
+		write64(InstancePtr->pci, (uint64_t)(baseAddr + address), data);
+	}
+	else 
+	{
+		printf("PciWriteReg failed due to null instance pointer\n");
+	}
+}
+
+uint64_t PciReadReg(XSpi *InstancePtr, uint64_t baseAddr, uint32_t address)
+{
+	uint64_t returnValue = 0xDEADBEEF;
+	if (InstancePtr->pci)
+	{
+		returnValue = read64(InstancePtr->pci, (uint64_t)(baseAddr + address));
+	}
+	else 
+	{
+		printf("PciReadReg failed due to null instance pointer\n");
+	}	
+	
+	return returnValue;
+}
+
 
 /*****************************************************************************/
 /**

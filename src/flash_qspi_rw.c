@@ -192,6 +192,7 @@ int pgm_flash_file (void);
 int qspi_ease_entire_flash (void);
 int qspi_erase_sector_flash (u32 OfsetAddr, u32 SectCount);
 int qspi_flash_erase_main (u32 OfsetAddr, u32 DieCount );
+int icap ();
 int SpiFlashReadID(XSpi *SpiPtr);
 int SpiFlashReadRegister(XSpi *SpiPtr, unsigned int addRegister, unsigned int byteCount);
 int SpiFlashReadRegisterNoWriteEnable(XSpi *SpiPtr, unsigned int addRegister, unsigned int byteCount);
@@ -294,6 +295,7 @@ int main(void)
 			printf("7: Enable Quad\r\n");
 			printf("8: Verify (*.bin)\r\n");
 			printf("9: Erase Quad SPI flash 1\r\n");
+			printf("10: ICAP\r\n");
 			fflush(stdout);
 			int choice;
     	    // choice = inbyte();
@@ -464,7 +466,12 @@ int main(void)
 				{
 					qspi_flash_erase_main(Address, 1);			
 					break;
-				}									
+				}
+				case 10:
+				{
+					icap();			
+					break;
+				}														
 				default:
 				{
 					break;
@@ -593,6 +600,27 @@ int qspi_flash_erase_main(u32 OfsetAddr, u32 DieCount)
 		}
 	}
 	*/
+	return XST_SUCCESS;
+}
+
+int icap()
+{
+	printf("\n icap \n\r");
+	uint64_t icapBaseAddr = 0x00070000;
+	uint32_t icapWriteFifo = 0x0220;
+	uint32_t icapWriteControl = 0x0218;
+	// write IPROG command sequence
+	PciWriteReg(&Spi, icapBaseAddr, icapWriteFifo, 0xFFFFFFFF);
+	PciWriteReg(&Spi, icapBaseAddr, icapWriteFifo, 0xAA995566);
+	PciWriteReg(&Spi, icapBaseAddr, icapWriteFifo, 0x20000000);
+	PciWriteReg(&Spi, icapBaseAddr, icapWriteFifo, 0x30020001);
+	PciWriteReg(&Spi, icapBaseAddr, icapWriteFifo, 0x00000000);
+	PciWriteReg(&Spi, icapBaseAddr, icapWriteFifo, 0x30008001);
+	PciWriteReg(&Spi, icapBaseAddr, icapWriteFifo, 0x0000000F);
+	PciWriteReg(&Spi, icapBaseAddr, icapWriteFifo, 0x20000000);	
+
+	// write control reg
+	PciWriteReg(&Spi, icapBaseAddr, icapWriteControl, 0x00000001);	
 	return XST_SUCCESS;
 }
 /*****************************************************************************/

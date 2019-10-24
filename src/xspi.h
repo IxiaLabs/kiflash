@@ -445,6 +445,9 @@ typedef struct {
 	Pcimem* pci;
 } XSpi;
 
+void PciWriteReg(XSpi *InstancePtr, uint64_t baseAddr, uint32_t address, uint64_t data);
+uint64_t PciReadReg(XSpi *InstancePtr, uint64_t baseAddr, uint32_t address);
+
 /***************** Macros (Inline Functions) Definitions *********************/
 
 /******************************************************************************/
