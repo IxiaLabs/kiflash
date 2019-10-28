@@ -29,10 +29,12 @@
 /**
 *
 * @file xspi.c
-* @addtogroup spi_v4_4
+* @addtogroup spi_v4_4sudo code -n --user-data-dir="~/.vscode-root"
+
 * @{
 *
-* Contains required functions of the XSpi driver component.  See xspi.h for
+* Contains required fusudo code -n --user-data-dir="~/.vscode-root"
+driver component.  See xspi.h for
 * a detailed description of the device and driver.
 *
 * <pre>
@@ -344,6 +346,31 @@ uint64_t PciReadReg(XSpi *InstancePtr, uint64_t baseAddr, uint32_t address)
 	return returnValue;
 }
 
+
+int PciSweep(XSpi *InstancePtr, uint32_t startadd)
+{
+	int returnValue = XST_SUCCESS;
+	if (InstancePtr->pci)
+	{
+		printf("read64 sweep start 0x%X end 0x%X\n", startadd, InstancePtr->pci->map_size);	
+    	fflush(stdout);	
+		uint32_t i = startadd;
+		while (i < InstancePtr->pci->map_size)		
+		{
+			uint64_t read_result = read64(InstancePtr->pci, i);
+			printf("sweep add 0x%X data 0x%X\r", i, read_result);
+			fflush(stdout);			
+			i += 8;
+		}	
+	}
+	else 
+	{
+		printf("PciSweep failed due to null instance pointer\n");
+		returnValue = XST_FAILURE; 
+	}	
+	
+	return returnValue;
+}
 
 /*****************************************************************************/
 /**

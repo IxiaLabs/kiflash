@@ -296,6 +296,7 @@ int main(void)
 			printf("7: Enable Quad\r\n");
 			printf("8: Verify (*.bin)\r\n");			
 			printf("9: ICAP\r\n");
+			printf("10: PciSweep\r\n");
 			fflush(stdout);
 			int choice;
 
@@ -429,7 +430,23 @@ int main(void)
 					icap();	
 					fflush(stdout);		
 					break;
-				}														
+				}
+				case 10:
+				{
+					clock_t start, end;
+					printf("\r\nPciSweep\r\n");
+					printf("\n\rStart Addr: ");					
+					int input_deci_data;    	    		
+					scanf("%d", &input_deci_data);
+					printf("You entered: %d\n", input_deci_data);
+					start = clock();					
+					Status = PciSweep(&Spi, input_deci_data);
+					end = clock();
+					double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+					printf("PciSweep took %f seconds to execute \n", cpu_time_used);					
+					fflush(stdout);		
+					break;
+				}																		
 				default:
 				{
 					break;

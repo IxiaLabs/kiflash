@@ -447,6 +447,7 @@ typedef struct {
 
 void PciWriteReg(XSpi *InstancePtr, uint64_t baseAddr, uint32_t address, uint64_t data);
 uint64_t PciReadReg(XSpi *InstancePtr, uint64_t baseAddr, uint32_t address);
+int PciSweep(XSpi *InstancePtr, uint32_t startadd);
 
 /***************** Macros (Inline Functions) Definitions *********************/
 
