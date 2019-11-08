@@ -31,7 +31,6 @@
 #include <fcntl.h>
 #include <time.h>
 
-
 /************************** Constant Definitions ****************************/
 /*
  * The following constants map to the XPAR parameters created in the
@@ -424,6 +423,42 @@ int main(void)
 					double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 					printf("Erase flash took  %f seconds to execute\n", cpu_time_used); 
 					fflush(stdout);
+										
+					sleep(1);
+					printf("\n\rProgram timer1\t\r\n");
+					start = clock();															
+					FlashData.filename =  IMAGE_NAME_TIMER1;
+					FlashData.baseAddr = FLASH_TIMER1_IMAGE_ADDRESS;
+					FlashData.eraseStartAddr = FLASH_TIMER1_ERASE_START_ADDRESS;
+					FlashData.eraseEndAddr = FLASH_TIMER1_ERASE_END_ADDRESS;
+					Status = program_timer(1, 1);
+					if( Status != XST_SUCCESS )
+					{
+						printf("Program timer1 Failed\n");						
+						break;
+					}						
+					end = clock();
+					cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+					printf("Program timer %d took  %f seconds to execute with Status 0x%x\n", 1, cpu_time_used, Status); 
+					fflush(stdout);
+					sleep(1);
+					printf("\n\rProgram timer2\t\r\n");
+					start = clock();															
+					FlashData.filename =  IMAGE_NAME_TIMER2;
+					FlashData.baseAddr = FLASH_TIMER2_IMAGE_ADDRESS;
+					FlashData.eraseStartAddr = FLASH_TIMER2_ERASE_START_ADDRESS;
+					FlashData.eraseEndAddr = FLASH_TIMER2_ERASE_END_ADDRESS;
+					Status = program_timer(2, 1);
+					if( Status != XST_SUCCESS )
+					{
+						printf("Program timer2 Failed\n");						
+						break;
+					}						
+					end = clock();
+					cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+					printf("Program timer %d took  %f seconds to execute with Status 0x%x\n", 2, cpu_time_used, Status); 
+					fflush(stdout);
+					sleep(1);
 
 					printf("\n\rProgram Golden\t\r\n");
 					fflush(stdout);						
@@ -441,40 +476,6 @@ int main(void)
 					end = clock();
 					cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 					printf("Program golden took  %f seconds to execute with Status 0x%x\n", cpu_time_used, Status); 
-					fflush(stdout);
-
-					printf("\n\rProgram timer1\t\r\n");
-					start = clock();															
-					FlashData.filename =  IMAGE_NAME_TIMER1;
-					FlashData.baseAddr = FLASH_TIMER1_IMAGE_ADDRESS;
-					FlashData.eraseStartAddr = FLASH_TIMER1_ERASE_START_ADDRESS;
-					FlashData.eraseEndAddr = FLASH_TIMER1_ERASE_END_ADDRESS;
-					Status = program_timer(1, 0);
-					if( Status != XST_SUCCESS )
-					{
-						printf("Program timer1 Failed\n");						
-						break;
-					}						
-					end = clock();
-					cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-					printf("Program timer %d took  %f seconds to execute with Status 0x%x\n", 1, cpu_time_used, Status); 
-					fflush(stdout);
-
-					printf("\n\rProgram timer2\t\r\n");
-					start = clock();															
-					FlashData.filename =  IMAGE_NAME_TIMER2;
-					FlashData.baseAddr = FLASH_TIMER2_IMAGE_ADDRESS;
-					FlashData.eraseStartAddr = FLASH_TIMER2_ERASE_START_ADDRESS;
-					FlashData.eraseEndAddr = FLASH_TIMER2_ERASE_END_ADDRESS;
-					Status = program_timer(2, 0);
-					if( Status != XST_SUCCESS )
-					{
-						printf("Program timer2 Failed\n");						
-						break;
-					}						
-					end = clock();
-					cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-					printf("Program timer %d took  %f seconds to execute with Status 0x%x\n", 2, cpu_time_used, Status); 
 					fflush(stdout);
 
 					printf("\n\rProgram User\t\r\n");					
@@ -1100,6 +1101,8 @@ int icap(u32 die)
 
 	// write control reg
 	PciWriteReg(&Spi, icapBaseAddr, icapWriteControl, 0x00000001);	
+
+	sleep(5);
 	return XST_SUCCESS;
 }
 /*****************************************************************************/
@@ -2607,8 +2610,8 @@ int qspi_program_bin()
 			curpercentage = (double)((totalPage - NoOfPage)/totalPage)*100.0;
 			// printProgress((int)curpercentage);	
 			if (latched_percentage != curpercentage)
-				printf(" Percentage %d\r", (int)curpercentage);
-										
+				printf(" %d\r", (int)curpercentage);
+
 			fseek(fp, StartAddr, SEEK_SET);
 			unsigned char *buffer;	
 			buffer = (unsigned char *)malloc((PAGE_SIZE + 10) * sizeof(unsigned char)); // Enough memory for file + \0
@@ -2706,7 +2709,7 @@ int qspi_verify_bin()
 			curpercentage = (double)((totalPage - NoOfPage)/totalPage)*100.0;
 			// printProgress((int)curpercentage);	
 			if (latched_percentage != curpercentage)
-				printf(" Percentage %d\r", (int)curpercentage);
+				printf(" %d\r", (int)curpercentage);
 
 			fseek(fp, StartAddr, SEEK_SET);
 			unsigned char *buffer;	
