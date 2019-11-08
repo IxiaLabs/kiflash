@@ -20,7 +20,7 @@ typedef struct {
 // void *virt_addr;
 // int map_size;
 
-
+void pcimem_test(int some);
 void pcimem_init(Pcimem *self);
 void pcimem_unmmap(Pcimem *self);
 
