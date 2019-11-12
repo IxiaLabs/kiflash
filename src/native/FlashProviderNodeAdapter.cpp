@@ -3,7 +3,7 @@
  * Keysight Confidential
  */
 
-#include "FloLicenseProviderNodeAdapter.h"
+#include "FlashProviderNodeAdapter.h"
 #include "NanCheckinAsyncWorker.h"
 #include "NanCheckoutAsyncWorker.h"
 #include "NanGetAvailableFeatureListAsyncWorker.h"
@@ -11,9 +11,9 @@
 #include "NanGetLicenseServerStatusAsyncWorker.h"
 
 #ifdef WIN32
-#include "Win64/FloLicenseProviderWrapperWindows.h"
+#include "Win64/FlashProviderWrapperWindows.h"
 #else
-#include "Linux/FloLicenseProviderWrapperLinux.h"
+#include "Linux/FlashProviderWrapperLinux.h"
 #endif
 
 #include "ValidateArguments.h"
@@ -24,13 +24,13 @@
 #include <algorithm>
 #include <ctime>
 
-Nan::Persistent<v8::Function> FloLicenseProviderNodeAdapter::s_constructor;
-static constexpr auto ObjectName = "FloLicenseProviderWrapper";
+Nan::Persistent<v8::Function> FlashProviderNodeAdapter::s_constructor;
+static constexpr auto ObjectName = "FlashProviderWrapper";
 const int LM_DUP_NONE = 0x4000;
 const int LM_DUP_HOST = 0x0002;
 
 // Initialize native extension
-void FloLicenseProviderNodeAdapter::Init(v8::Local<v8::Object> exports)
+void FlashProviderNodeAdapter::Init(v8::Local<v8::Object> exports)
 {
     v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
     tpl->SetClassName(Nan::New(ObjectName).ToLocalChecked());
@@ -48,7 +48,7 @@ void FloLicenseProviderNodeAdapter::Init(v8::Local<v8::Object> exports)
 }
 
 // Request to create native object to
-void FloLicenseProviderNodeAdapter::New(const InfoT& info)
+void FlashProviderNodeAdapter::New(const InfoT& info)
 {
     ValidateArguments { info, 2 };
 
@@ -76,29 +76,25 @@ void FloLicenseProviderNodeAdapter::New(const InfoT& info)
 
     try
     {
-        auto provider = new FloLicenseProviderNodeAdapter(productId, path, workingDir);
+        auto provider = new FlashProviderNodeAdapter(productId, path, workingDir);
 
         provider->Wrap(info.This());
         info.GetReturnValue().Set(info.This());
     }
     catch (std::exception& e)
     {
-        auto err = std::string("Failed to create the FloLicenseProviderNodeAdapter: ") + std::string(e.what());
+        auto err = std::string("Failed to create the FlashProviderNodeAdapter: ") + std::string(e.what());
         Nan::ThrowTypeError(err.c_str());
         return;
     }
 }
 
-FloLicenseProviderNodeAdapter::FloLicenseProviderNodeAdapter(std::string productId, std::string path, std::string workingDir) :
+FlashProviderNodeAdapter::FlashProviderNodeAdapter(std::string productId, std::string path, std::string workingDir) :
     m_isValid(false)
 {
     try
     {
-#ifdef WIN32
-        m_pWrapper = new FloLicenseProviderWrapperWindows(workingDir);
-#else
-        m_pWrapper = new FloLicenseProviderWrapperLinux(workingDir);
-#endif
+        m_pWrapper = new FlashProviderWrapperLinux(workingDir);
 
         if (productId != "undefined")
         {
@@ -120,16 +116,16 @@ FloLicenseProviderNodeAdapter::FloLicenseProviderNodeAdapter(std::string product
     }
 }
 
-FloLicenseProviderNodeAdapter::~FloLicenseProviderNodeAdapter()
+FlashProviderNodeAdapter::~FlashProviderNodeAdapter()
 {
     delete m_pWrapper;
 }
 
-void FloLicenseProviderNodeAdapter::CheckOut(const InfoT& info)
+void FlashProviderNodeAdapter::CheckOut(const InfoT& info)
 {
     ValidateArguments{info, 4};
 
-    auto adapter = ObjectWrap::Unwrap<FloLicenseProviderNodeAdapter>(info.Holder());
+    auto adapter = ObjectWrap::Unwrap<FlashProviderNodeAdapter>(info.Holder());
 
     if (!info[0]->IsString())
     {
@@ -164,11 +160,11 @@ void FloLicenseProviderNodeAdapter::CheckOut(const InfoT& info)
     }
 }
 
-void FloLicenseProviderNodeAdapter::CheckIn(const InfoT& info)
+void FlashProviderNodeAdapter::CheckIn(const InfoT& info)
 {
     ValidateArguments{info, 2};
 
-    auto adapter = ObjectWrap::Unwrap<FloLicenseProviderNodeAdapter>(info.Holder());
+    auto adapter = ObjectWrap::Unwrap<FlashProviderNodeAdapter>(info.Holder());
 
     if (!info[0]->IsString())
     {
@@ -190,11 +186,11 @@ void FloLicenseProviderNodeAdapter::CheckIn(const InfoT& info)
 
 }
 
-void FloLicenseProviderNodeAdapter::GetAvailableFeatureList(const InfoT& info)
+void FlashProviderNodeAdapter::GetAvailableFeatureList(const InfoT& info)
 {
     ValidateArguments{info, 1};
 
-    auto adapter = ObjectWrap::Unwrap<FloLicenseProviderNodeAdapter>(info.Holder());
+    auto adapter = ObjectWrap::Unwrap<FlashProviderNodeAdapter>(info.Holder());
 
     // callback
     if (info[0]->IsFunction())
@@ -204,11 +200,11 @@ void FloLicenseProviderNodeAdapter::GetAvailableFeatureList(const InfoT& info)
     }
 }
 
-void FloLicenseProviderNodeAdapter::GetLicenseServerStatus(const InfoT& info)
+void FlashProviderNodeAdapter::GetLicenseServerStatus(const InfoT& info)
 {
     ValidateArguments{ info, 1 };
 
-    auto adapter = ObjectWrap::Unwrap<FloLicenseProviderNodeAdapter>(info.Holder());
+    auto adapter = ObjectWrap::Unwrap<FlashProviderNodeAdapter>(info.Holder());
 
     // callback
     if (info[0]->IsFunction())
@@ -219,11 +215,11 @@ void FloLicenseProviderNodeAdapter::GetLicenseServerStatus(const InfoT& info)
 
 }
 
-void FloLicenseProviderNodeAdapter::SetLicenseSearchPath(const InfoT& info)
+void FlashProviderNodeAdapter::SetLicenseSearchPath(const InfoT& info)
 {
     ValidateArguments{ info, 2 };
 
-    auto adapter = ObjectWrap::Unwrap<FloLicenseProviderNodeAdapter>(info.Holder());
+    auto adapter = ObjectWrap::Unwrap<FlashProviderNodeAdapter>(info.Holder());
 
         if (!info[0]->IsString())
         {
@@ -243,18 +239,18 @@ void FloLicenseProviderNodeAdapter::SetLicenseSearchPath(const InfoT& info)
     Nan::AsyncQueueWorker(new NanSetLicenseSearchPathAsyncWorker(callBack, info.GetIsolate(), adapter, serverPath));
 }
 
-bool FloLicenseProviderNodeAdapter::IsCheckedOut(std::string feature)
+bool FlashProviderNodeAdapter::IsCheckedOut(std::string feature)
 {
     int result = m_pWrapper->FloCheckIsCheckedOut((char*) feature.c_str());
     return result == 0;
 }
 
-int FloLicenseProviderNodeAdapter::GetLastErrorNumber()
+int FlashProviderNodeAdapter::GetLastErrorNumber()
 {
     return m_pWrapper->FloGetLastErrorNumber();
 }
 
-std::string FloLicenseProviderNodeAdapter::GetLastErrorMessage()
+std::string FlashProviderNodeAdapter::GetLastErrorMessage()
 {
     std::string result;
 
@@ -275,14 +271,14 @@ std::string FloLicenseProviderNodeAdapter::GetLastErrorMessage()
     return result;
 }
 
-void FloLicenseProviderNodeAdapter::CheckIn(FeatureT feature)
+void FlashProviderNodeAdapter::CheckIn(FeatureT feature)
 {
     m_pWrapper->FloCheckIn((char*) feature.c_str());
 
     SetFeatureCheckedIn(feature);
 }
 
-int FloLicenseProviderNodeAdapter::GetFeatureCount()
+int FlashProviderNodeAdapter::GetFeatureCount()
 {
     int count;
     const FLO_ERROR errorNumber = m_pWrapper->FloGetFeatureCount(&count);
@@ -294,17 +290,17 @@ int FloLicenseProviderNodeAdapter::GetFeatureCount()
     return errorNumber < 0 ? errorNumber : -1;
 }
 
-void FloLicenseProviderNodeAdapter::CheckOut(FeatureT feature, std::string version, int totalNumberOfLicenses)
+void FlashProviderNodeAdapter::CheckOut(FeatureT feature, std::string version, int totalNumberOfLicenses)
 {
     m_pWrapper->FloCheckOut((char*) feature.c_str(), (char*) version.c_str(), totalNumberOfLicenses, LM_DUP_NONE);
 }
 
-bool FloLicenseProviderNodeAdapter::CheckOutConfig(FeatureT feature)
+bool FlashProviderNodeAdapter::CheckOutConfig(FeatureT feature)
 {
     return m_pWrapper->FloLoadConfigBufferWithCheckedOutFeature((char*) feature.c_str()) == 0;
 }
 
-std::string FloLicenseProviderNodeAdapter::ConfigInfo(std::string fieldName)
+std::string FlashProviderNodeAdapter::ConfigInfo(std::string fieldName)
 {
     std::string returnVal;
     int size;
@@ -324,12 +320,12 @@ std::string FloLicenseProviderNodeAdapter::ConfigInfo(std::string fieldName)
     return returnVal;
 }
 
-bool FloLicenseProviderNodeAdapter::ConfigFeature(FeatureT featureName, bool first)
+bool FlashProviderNodeAdapter::ConfigFeature(FeatureT featureName, bool first)
 {
     return (m_pWrapper->FloLoadConfigBufferWithFeature(featureName.c_str(), first) == 0);
 }
 
-void FloLicenseProviderNodeAdapter::SetLicenseSearchPath(std::string path)
+void FlashProviderNodeAdapter::SetLicenseSearchPath(std::string path)
 {
     auto licenses = this->GetLicenses();
     for (auto license : licenses)
@@ -342,7 +338,7 @@ void FloLicenseProviderNodeAdapter::SetLicenseSearchPath(std::string path)
     return m_pWrapper->SetLicenseSearchPath(path);
 }
 
-std::string FloLicenseProviderNodeAdapter::GetFeatureName(int idx)
+std::string FlashProviderNodeAdapter::GetFeatureName(int idx)
 {
     std::string result;
 
@@ -363,7 +359,7 @@ std::string FloLicenseProviderNodeAdapter::GetFeatureName(int idx)
     return result;
 }
 
-LicenseConfig FloLicenseProviderNodeAdapter::CreateLicenseConfig()
+LicenseConfig FlashProviderNodeAdapter::CreateLicenseConfig()
 {
     LicenseConfig config;
 
@@ -497,12 +493,12 @@ LicenseConfig FloLicenseProviderNodeAdapter::CreateLicenseConfig()
     return config;
 }
 
-void FloLicenseProviderNodeAdapter::SetFeatureCheckedOut(LicenseConfig config)
+void FlashProviderNodeAdapter::SetFeatureCheckedOut(LicenseConfig config)
 {
     m_licenses[config.GetFeature()] = config.GetServerName();
 }
 
-void FloLicenseProviderNodeAdapter::SetFeatureCheckedIn(FeatureT feature)
+void FlashProviderNodeAdapter::SetFeatureCheckedIn(FeatureT feature)
 {
     if (m_licenses.find(feature) != m_licenses.end())
     {
@@ -510,7 +506,7 @@ void FloLicenseProviderNodeAdapter::SetFeatureCheckedIn(FeatureT feature)
     }
 }
 
-std::tuple<int, int, int> FloLicenseProviderNodeAdapter::GetConnectionStatus(FeatureT feature)
+std::tuple<int, int, int> FlashProviderNodeAdapter::GetConnectionStatus(FeatureT feature)
 {
     CONNECT_STATE connectState = CONNECT_STATE::CONN_OK;
     int pass = 0;

@@ -1,4 +1,4 @@
-const mmap = require("../ki_mmap");
+const mmap = require("./ki_mmap");
 
 const fs = require("fs");
 const filename = "/sys/devices/pci0000\:00/0000\:00\:01.0/0000\:01\:00.0/resource1";

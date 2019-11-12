@@ -11,6 +11,7 @@
 #include <errno.h>
 #include <string>
 #include <algorithm>    // std::min
+#include <dlfcn.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -53,7 +54,7 @@ inline int do_mmap_advice(void* addr, size_t length, int advise) {
 
 JS_FN(mmap_map) {
     Nan::HandleScope();
-
+        
     if (info.Length() < 4 && info.Length() > 6) {
         return Nan::ThrowError(
             "map() takes 4, 5 or 6 arguments: (size :int, protection :int, flags :int, fd :int [, offset :int [, advise :int]])."
@@ -75,7 +76,25 @@ JS_FN(mmap_map) {
     const size_t    offset          = info[4]->ToInteger()->Value();   // ToInt64()->Value();
     const int       advise          = info[5]->ToInteger()->Value();
 
-    // pcimem_test(0);
+    void *handle;
+    void (*func_test)();
+    handle = dlopen("/home/ixiaadmin/git/kiflash/bin/Linux/libFlashProvider.so", RTLD_LAZY);
+
+    if (!handle) {
+        /* fail to load the library */
+        printf("Fail to load the libary\n");
+        return Nan::ThrowError("Fail to load the library");
+
+    }
+
+    *(void**)(&func_test) = dlsym(handle, "pcimem_test");
+    if (!func_test) {
+        /* no such symbol */
+        printf("no such symbol\n");        
+        return Nan::ThrowError("no such symbol");
+    }    
+
+    func_test();
     // char* data = static_cast<char*>( mmap( hinted_address, size, protection, flags, fd, offset) );
     void *map_base = mmap( hinted_address, size, protection, flags, fd, offset);
 
