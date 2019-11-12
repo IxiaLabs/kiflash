@@ -33,7 +33,6 @@ FlashProviderWrapperLinux::~FlashProviderWrapperLinux()
     }
 }
 
-
 void FlashProviderWrapper::SetFlashSearchPath(const std::string& path)
 {
     if (m_path != path)

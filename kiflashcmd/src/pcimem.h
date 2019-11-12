@@ -23,7 +23,7 @@ typedef struct {
 
 void pcimem_init(Pcimem *self);
 void pcimem_unmmap(Pcimem *self);
-
+void testpcimem();
 uint64_t read64(Pcimem *self, uint64_t address);
 void write64(Pcimem *self, uint64_t address, uint64_t data);
 #endif
