@@ -5,13 +5,11 @@
 class FlashProviderWrapper
 {
 public:
-    FlashProviderWrapper() = default;
-    virtual ~FlashProviderWrapper() = default;
-
-//    virtual void SetLicenseSearchPathByProduct(const std::string& productId) = 0;
+    FlashProviderWrapper();
+    virtual ~FlashProviderWrapper();
+    
     virtual void SetFlashSearchPath(const std::string& path);
     virtual void ReloadFlashSearchPath();
-
 	
 	virtual void FlashOpen(void);
     virtual void FlashClose(void);
@@ -32,7 +30,7 @@ public:
 */    
 
 protected:
-    // void LoadLibrary();
+    void LoadLibrary();
 
 	// FloUnlockT *m_fnFloUnlock;
 	FlashOpenT *m_fnFlashOpen;

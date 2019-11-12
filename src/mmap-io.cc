@@ -39,7 +39,6 @@ struct MMap {
 };
 
 static void* map_virtual_addr;
-SharedLibraryHandleT m_hLibrary;
 
 
 void do_mmap_cleanup(char* data, void* hint) {
@@ -76,7 +75,7 @@ JS_FN(mmap_map) {
     const size_t    offset          = info[4]->ToInteger()->Value();   // ToInt64()->Value();
     const int       advise          = info[5]->ToInteger()->Value();
 
-    pcimem_test(0);
+    // pcimem_test(0);
     // char* data = static_cast<char*>( mmap( hinted_address, size, protection, flags, fd, offset) );
     void *map_base = mmap( hinted_address, size, protection, flags, fd, offset);
 

@@ -5,17 +5,33 @@
 #include <exception>
 #include <stdexcept>
 
-/*void FlashProviderWrapper::LoadLibrary()
+FlashProviderWrapperLinux::FlashProviderWrapperLinux(std::string libraryPath)
 {
-    bool m_isValid = (FloUnlock(floCalculateKey(1956)) == floCalculateKey(1013));
-
-    if (!m_isValid)
+    try
     {
-        throw std::runtime_error("Failed to unlock library");
+        // if not passed in from JS-land
+        if (libraryPath.empty())
+        {
+            LoadLibrary("build/Release");
+        }
+        else
+        {
+            LoadLibrary(libraryPath);
+        }
     }
+    catch (std::exception& e)
+    {
+        throw(e);
+    }
+}
 
-    FloGetLastErrorNumber();
-}*/
+FlashProviderWrapperLinux::~FlashProviderWrapperLinux()
+{
+    if (m_hLibrary)
+    {
+        dlclose(m_hLibrary);
+    }
+}
 
 
 void FlashProviderWrapper::SetFlashSearchPath(const std::string& path)
@@ -122,3 +138,66 @@ void FlashProviderWrapper::FloClose(void)
 {
     return m_fnFloGetUserListForFeature(feature, userArray, userArraySize);
 }*/
+
+void FlashProviderWrapper::LoadLibraryFunctions(SharedLibraryHandleT hLibrary)
+{
+    // m_fnFloUnlock = (FloUnlockT *)dlsym(hLibrary, STR(floUnlock));
+	FlashOpenT *m_fnFlashOpen;
+	FlashCloseT *m_fnFlashClose;    
+    m_fnFlashOpen = (FlashOpenT *)dlsym(hLibrary, STR(flashOpen));
+    m_fnFlashClose = (FlashCloseT *)dlsym(hLibrary, STR(flashClose));
+/*    m_fnFloGetLastErrorNumber = (FloGetLastErrorNumberT *)dlsym(hLibrary, STR(floGetLastErrorNumber));
+    m_fnFloGetLastErrorMessage = (FloGetLastErrorMessageT *)dlsym(hLibrary, STR(floGetLastErrorMessage));
+    m_fnFloSetLicenseSearchPath = (FloSetLicenseSearchPathT *)dlsym(hLibrary, STR(floSetLicenseSearchPath));
+    m_fnFloCheckOut= (FloCheckOutT *)dlsym(hLibrary, STR(floCheckOut));
+    m_fnFloCheckIn = (FloCheckInT *)dlsym(hLibrary, STR(floCheckIn));
+    m_fnFloGetFeatureCount = (FloGetFeatureCountT *)dlsym(hLibrary, STR(floGetFeatureCount));
+    m_fnFloGetFeatureName = (FloGetFeatureNameT *)dlsym(hLibrary, STR(floGetFeatureName));
+    m_fnFloCheckIsCheckedOut = (FloCheckIsCheckedOutT *)dlsym(hLibrary, STR(floCheckIsCheckedOut));
+    m_fnFloGetFieldFromConfigBuffer = (FloGetFieldFromConfigBufferT *)dlsym(hLibrary, STR(floGetFieldFromConfigBuffer));
+    m_fnFloLoadConfigBufferWithFeature = (FloLoadConfigBufferWithFeatureT *)dlsym(hLibrary, STR(floLoadConfigBufferWithFeature));
+    m_fnFloLoadConfigBufferWithCheckedOutFeature = (FloLoadConfigBufferWithCheckedOutFeatureT *)dlsym(hLibrary, STR(floLoadConfigBufferWithCheckedOutFeature));
+    m_fnFloGetConnectStatusForFeature = (FloGetConnectStatusForFeatureT *)dlsym(hLibrary, STR(floGetConnectStatusForFeature));
+    m_fnFloGetUserListForFeature = (FloGetUserListForFeatureT *)dlsym(hLibrary, STR(floGetUserListForFeature));
+*/    
+
+    if (//!m_fnFloUnlock ||
+        !m_fnFlashOpen ||
+        !m_fnFlashClose )
+        //!m_fnFloGetLastErrorNumber ||
+        //!m_fnFloGetLastErrorMessage ||
+        //!m_fnFloSetLicenseSearchPath ||
+        //!m_fnFloCheckOut||
+        //!m_fnFloCheckIn ||
+        //!m_fnFloGetFeatureCount ||
+        //!m_fnFloGetFeatureName ||
+        //!m_fnFloCheckIsCheckedOut ||
+        //!m_fnFloGetFieldFromConfigBuffer ||
+        //!m_fnFloLoadConfigBufferWithFeature ||
+        //!m_fnFloLoadConfigBufferWithCheckedOutFeature ||
+        //!m_fnFloGetConnectStatusForFeature ||
+        //!m_fnFloGetUserListForFeature)
+    {
+        auto err = "The functions failed to load! ";
+        std::cout << err << std::endl;
+        throw std::runtime_error(err);
+    }
+}
+
+void FlashProviderWrapper::LoadLibrary(std::string path)
+{
+    path += "/libFlashProvider.so";
+    m_hLibrary = dlopen(path.c_str(), RTLD_LAZY);
+
+    if (!m_hLibrary)
+    {
+        char cwd[1024];
+        getcwd(cwd, 1024);
+        std::stringstream err;
+        err << "Failed to load the library " << path << " my current path is: " << cwd << std::endl;
+        throw std::runtime_error(err.str());
+    };
+
+    LoadLibraryFunctions(m_hLibrary);
+    FlashProviderWrapper::LoadLibrary();
+}
