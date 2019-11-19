@@ -1,1 +1,0 @@
-cmd_Release/obj.target/ki_mmap.node := g++ -shared -pthread -rdynamic -m64  -Wl,-soname=ki_mmap.node -o Release/obj.target/ki_mmap.node -Wl,--start-group Release/obj.target/ki_mmap/src/mmap-io.o -Wl,--end-group -lpcimem -L/home/ixiaadmin/git/kiflash/src
