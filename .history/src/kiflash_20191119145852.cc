@@ -29,10 +29,8 @@ using namespace v8;
 
 static const unsigned int kOffsetValueListEntries	= 0x00200000;
 static const unsigned int kMaxNoOfRangeListEntries	= 1024;
-void *handle;
-void (*func_test)();
-void (*func_flashtest)();
-int (*func_flashprog)();
+
+
 
 // Just a bit more clear as to intent
 #define JS_FN(a) NAN_METHOD(a)
@@ -84,14 +82,14 @@ JS_FN(mmap_map) {
     const size_t    offset          = info[4]->ToInteger()->Value();   // ToInt64()->Value();
     const int       advise          = info[5]->ToInteger()->Value();
 
-    /*void *handle;
+    void *handle;
     void (*func_test)();
     void (*func_flashtest)();
     void (*func_flashprog)();
     handle = dlopen("/home/ixiaadmin/git/kiflash/bin/Linux/libFlashProvider.so", RTLD_LAZY);
 
     if (!handle) {
-        // fail to load the library
+        /* fail to load the library */
         printf("Fail to load the libary\n");
         return Nan::ThrowError("Fail to load the library");
 
@@ -99,21 +97,21 @@ JS_FN(mmap_map) {
 
     *(void**)(&func_test) = dlsym(handle, "pcimem_test");
     if (!func_test) {
-        // no such symbol
+        /* no such symbol */
         printf("pcimem_test no such symbol\n");        
         return Nan::ThrowError("no such symbol pcimem_test");
     }    
 
     *(void**)(&func_flashtest) = dlsym(handle, "kiflash_test");
     if (!func_flashtest) {
-        // no such symbol
+        /* no such symbol */
         printf("kiflash_test no such symbol\n");        
         return Nan::ThrowError("no such symbol kiflash_test");
     }    
 
     *(void**)(&func_flashprog) = dlsym(handle, "kiflash_program_user");
     if (!func_flashprog) {
-        // no such symbol
+        /* no such symbol */
         printf("kiflash_test no such symbol\n");        
         return Nan::ThrowError("no such symbol kiflash_program_user");
     }    
@@ -121,7 +119,6 @@ JS_FN(mmap_map) {
     func_test();
     func_flashtest();
     func_flashprog();
-*/
     // char* data = static_cast<char*>( mmap( hinted_address, size, protection, flags, fd, offset) );
     void *map_base = mmap( hinted_address, size, protection, flags, fd, offset);
 
@@ -388,10 +385,6 @@ JS_FN(mmap_programuser) {
     size_t          valsize    = node::Buffer::Length(valbuf);        
 */    
 
-    int returnValue = func_flashprog();
-    info.GetReturnValue().Set(returnValue);
-
-    /*Nan::AsyncQueueWorker(new NanGetAvailableFeatureListAsyncWorker(callBack, info.GetIsolate(), adapter));
     if (map_virtual_addr == (void *) -1) {
         return Nan::ThrowError((std::string("mmap write failed, ") + std::to_string(errno)).c_str());
     }
@@ -404,7 +397,7 @@ JS_FN(mmap_programuser) {
             *((uint64_t *) virt_addr) = fromBuffer(valdata, start);
         }
     }
-    */
+    
     //Nan::ReturnUndefined();
 }
 
@@ -440,40 +433,6 @@ JS_FN(mmap_sync_lib_private_) {
 
 
 NAN_MODULE_INIT(Init) {
-    handle = dlopen("/home/ixiaadmin/git/kiflash/bin/Linux/libFlashProvider.so", RTLD_LAZY);
-
-    if (!handle) {
-        /* fail to load the library */
-        printf("Fail to load the libary\n");
-        return Nan::ThrowError("Fail to load the library");
-
-    }
-
-    *(void**)(&func_test) = dlsym(handle, "pcimem_test");
-    if (!func_test) {
-        /* no such symbol */
-        printf("pcimem_test no such symbol\n");        
-        return Nan::ThrowError("no such symbol pcimem_test");
-    }    
-
-    *(void**)(&func_flashtest) = dlsym(handle, "kiflash_test");
-    if (!func_flashtest) {
-        /* no such symbol */
-        printf("kiflash_test no such symbol\n");        
-        return Nan::ThrowError("no such symbol kiflash_test");
-    }    
-
-    *(void**)(&func_flashprog) = dlsym(handle, "kiflash_program_user");
-    if (!func_flashprog) {
-        /* no such symbol */
-        printf("kiflash_test no such symbol\n");        
-        return Nan::ThrowError("no such symbol kiflash_program_user");
-    }    
-
-    func_test();
-    func_flashtest();
-    // func_flashprog();
-
     auto exports = target;
 
     constexpr auto property_attrs = static_cast<PropertyAttribute>(

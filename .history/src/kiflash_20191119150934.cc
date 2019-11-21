@@ -32,7 +32,7 @@ static const unsigned int kMaxNoOfRangeListEntries	= 1024;
 void *handle;
 void (*func_test)();
 void (*func_flashtest)();
-int (*func_flashprog)();
+void (*func_flashprog)();
 
 // Just a bit more clear as to intent
 #define JS_FN(a) NAN_METHOD(a)
@@ -388,10 +388,7 @@ JS_FN(mmap_programuser) {
     size_t          valsize    = node::Buffer::Length(valbuf);        
 */    
 
-    int returnValue = func_flashprog();
-    info.GetReturnValue().Set(returnValue);
-
-    /*Nan::AsyncQueueWorker(new NanGetAvailableFeatureListAsyncWorker(callBack, info.GetIsolate(), adapter));
+    Nan::AsyncQueueWorker(new NanGetAvailableFeatureListAsyncWorker(callBack, info.GetIsolate(), adapter));
     if (map_virtual_addr == (void *) -1) {
         return Nan::ThrowError((std::string("mmap write failed, ") + std::to_string(errno)).c_str());
     }
@@ -404,7 +401,7 @@ JS_FN(mmap_programuser) {
             *((uint64_t *) virt_addr) = fromBuffer(valdata, start);
         }
     }
-    */
+    
     //Nan::ReturnUndefined();
 }
 
@@ -472,7 +469,7 @@ NAN_MODULE_INIT(Init) {
 
     func_test();
     func_flashtest();
-    // func_flashprog();
+    func_flashprog();
 
     auto exports = target;
 

@@ -8,7 +8,7 @@ var buf1;
 console.log(filename + " opened");
 
 async function localprog() {
-    let returnValue = await mmap.programuser();
+    returnValue = await mmap.programuser();
     return new Promise<number>(resolve => {resolve(returnValue)});    
 }
 async function printNumber1() {

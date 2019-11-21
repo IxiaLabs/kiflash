@@ -7,11 +7,7 @@ var buf1;
 
 console.log(filename + " opened");
 
-async function localprog() {
-    let returnValue = await mmap.programuser();
-    return new Promise<number>(resolve => {resolve(returnValue)});    
-}
-async function printNumber1() {
+function printNumber1() {
     return new Promise((resolve) => {
        setTimeout(() => {
        console.log("----- Number1 is done\n");
@@ -20,7 +16,7 @@ async function printNumber1() {
     });
  }
 
-async function printNumber2() {
+function printNumber2() {
     return new Promise((resolve,) => {
        setTimeout(() => {
        console.log("----- Number2 is done\n");
@@ -80,11 +76,11 @@ async function main() {
 
         
         const promise1 = printNumber1();
-        // const promise2 = printNumber2();
-        const promise2 = localprog();
+        const promise2 = printNumber2();
+        // const promise2 = mmap.programuser();
         const number1 = await promise1;
         const number2 = await promise2;
-        // const returnValue = await mmap.programuser();
+        const returnValue = await mmap.programuser();
 
 /*        let increment = 0;
         while(returnValue != 0)

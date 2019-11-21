@@ -12,6 +12,7 @@ declare type MmapIo = {
     sync(buffer: Buffer, offset?: number, size?: number, blocking_sync?: boolean, invalidate_pages?: boolean): void;
     sync(buffer: Buffer, blocking_sync: boolean, invalidate_pages?: boolean): void;
     writebuffer(offset: number, value: Buffer): void;
+    programuser(): Promise<number>;
     write64(offset: number, hi_value: number, lo_value: number): void;
     read64(offset: number): [number, number];
     readonly PROT_READ: 1;

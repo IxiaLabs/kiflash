@@ -32,7 +32,7 @@ static const unsigned int kMaxNoOfRangeListEntries	= 1024;
 void *handle;
 void (*func_test)();
 void (*func_flashtest)();
-int (*func_flashprog)();
+void (*func_flashprog)();
 
 // Just a bit more clear as to intent
 #define JS_FN(a) NAN_METHOD(a)
@@ -389,8 +389,7 @@ JS_FN(mmap_programuser) {
 */    
 
     int returnValue = func_flashprog();
-    info.GetReturnValue().Set(returnValue);
-
+    return returnValue;
     /*Nan::AsyncQueueWorker(new NanGetAvailableFeatureListAsyncWorker(callBack, info.GetIsolate(), adapter));
     if (map_virtual_addr == (void *) -1) {
         return Nan::ThrowError((std::string("mmap write failed, ") + std::to_string(errno)).c_str());
@@ -463,7 +462,7 @@ NAN_MODULE_INIT(Init) {
         return Nan::ThrowError("no such symbol kiflash_test");
     }    
 
-    *(void**)(&func_flashprog) = dlsym(handle, "kiflash_program_user");
+    *(int**)(&func_flashprog) = dlsym(handle, "kiflash_program_user");
     if (!func_flashprog) {
         /* no such symbol */
         printf("kiflash_test no such symbol\n");        

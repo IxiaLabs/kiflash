@@ -32,7 +32,7 @@ static const unsigned int kMaxNoOfRangeListEntries	= 1024;
 void *handle;
 void (*func_test)();
 void (*func_flashtest)();
-int (*func_flashprog)();
+void (*func_flashprog)();
 
 // Just a bit more clear as to intent
 #define JS_FN(a) NAN_METHOD(a)

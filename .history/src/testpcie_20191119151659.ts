@@ -7,28 +7,6 @@ var buf1;
 
 console.log(filename + " opened");
 
-async function localprog() {
-    let returnValue = await mmap.programuser();
-    return new Promise<number>(resolve => {resolve(returnValue)});    
-}
-async function printNumber1() {
-    return new Promise((resolve) => {
-       setTimeout(() => {
-       console.log("----- Number1 is done\n");
-       resolve(10);
-       },1000);
-    });
- }
-
-async function printNumber2() {
-    return new Promise((resolve,) => {
-       setTimeout(() => {
-       console.log("----- Number2 is done\n");
-       resolve(20);
-       },500);
-    });
- }
- 
 async function main() {
     // Create an instance of the FloLicenseProvider and get licenses inventory.
     //const options = { path: "27009@2ua7343281.lbj.is.keysight.com" };
@@ -72,27 +50,10 @@ async function main() {
         
         console.log('Wrote to: 0x' + addr_to_try.toString(16) + ' with value: ' + ' hi ' + resultlist[1].toString(16) + ' lo ' + resultlist[0].toString(16));
 
-        console.log('** programuser entered\n');
+        console.log('programuser entered\n');
         
-        
-        // let returnValue = 1;
-        // returnValue = await mmap.programuser();
-
-        
-        const promise1 = printNumber1();
-        // const promise2 = printNumber2();
-        const promise2 = localprog();
-        const number1 = await promise1;
-        const number2 = await promise2;
-        // const returnValue = await mmap.programuser();
-
-/*        let increment = 0;
-        while(returnValue != 0)
-        {
-            console.log("%d\r", increment++);
-        }        
-*/        
-        console.log('** programuser ended with returnvalue %d concurrent test return %d\n', number2, number1);
+        let returnValue = 1;
+        returnValue = await mmap.programuser();
         // buf1[0x722018] = 1;
         // console.log(buf1[0]);
         // console.log(buf1[1]);
