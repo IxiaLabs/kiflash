@@ -1,3 +1,22 @@
+
+
+const worker = require("streaming-worker");
+const path = require("path");
+
+var addon_path = path.join(__dirname, "build/Release/kiflash");
+
+const kiflash = worker(addon_path);
+
+kiflash.from.on('factor', function(factor: any){
+    console.log("Factor:  " + factor);
+});
+
+kiflash.from.on('error', function(e: any) {
+    console.log(e);
+});
+
+
+/*
 const mmap_lib_raw_ = require("../build/Release/kiflash")
 
 type FileDescriptor = number
@@ -130,3 +149,4 @@ mmap_lib_raw_.sync = function(
 const mmap = mmap_lib_raw_ as MmapIo
 module.exports = mmap
 export default mmap
+*/

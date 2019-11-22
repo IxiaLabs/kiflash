@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "pcimem.h": "c",
-        "mman.h": "c"
+        "mman.h": "c",
+        "future": "cpp"
     }
 }

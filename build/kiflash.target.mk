@@ -32,8 +32,8 @@ CFLAGS_C_Debug :=
 # Flags passed to only C++ files.
 CFLAGS_CC_Debug := \
 	-fno-rtti \
-	-fno-exceptions \
 	-std=gnu++1y \
+	-Wall \
 	-std=c++11
 
 INCS_Debug := \
@@ -45,6 +45,7 @@ INCS_Debug := \
 	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/deps/zlib \
 	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/deps/v8/include \
 	-I$(srcdir)/node_modules/nan \
+	-I$(srcdir)/node_modules/streaming-worker-sdk \
 	-I$(srcdir)/kiflashcore/src
 
 DEFS_Release := \
@@ -74,8 +75,8 @@ CFLAGS_C_Release :=
 # Flags passed to only C++ files.
 CFLAGS_CC_Release := \
 	-fno-rtti \
-	-fno-exceptions \
 	-std=gnu++1y \
+	-Wall \
 	-std=c++11
 
 INCS_Release := \
@@ -87,6 +88,7 @@ INCS_Release := \
 	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/deps/zlib \
 	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/deps/v8/include \
 	-I$(srcdir)/node_modules/nan \
+	-I$(srcdir)/node_modules/streaming-worker-sdk \
 	-I$(srcdir)/kiflashcore/src
 
 OBJS := \
