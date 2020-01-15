@@ -101,14 +101,9 @@ class Kiflash : public StreamingWorker {
           send_factor(progress, N);
         }
         // std::this_thread::sleep_for(chrono::milliseconds(100));
-      }    
-
-      if (N == 100)  
-      {
-        send_factor(progress, 100);
-      }
-    
+      }      
       int ret = fut.get(); 
+      send_factor(progress, 100);
       // int result = r.get();
     }
   private:

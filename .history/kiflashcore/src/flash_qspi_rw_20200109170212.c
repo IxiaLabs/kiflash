@@ -381,27 +381,27 @@ int kiflash_program_user()
 
 	printf("KiFlash Program User 1\n");	
 	fflush(stdout);	
-	for(int i = 0; i < 100; i++)
+	/*for(int i = 0; i < 30; i++)
 	{
-		sleep(1); //back d
+		sleep(10); //back d
 		FlashData.percentage += 1;		
 	}
-	
-	/*Status = program_user(1); 
+	*/
+	Status = program_user(1); 
 	if( Status != XST_SUCCESS )
 	{
 		printf("Program User Failed\n");				
 		return XST_FAILURE;
-	}*/							
+	}						
 	end = clock();
 	double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("Program user took  %f seconds to execute with Status 0x%x\n", cpu_time_used, Status); 
 	fflush(stdout);
 
 	printf("\n\rICAP\t\r\n");	
-	fflush(stdout);	
-	icap(0);	
+	fflush(stdout);
 	FlashData.percentage = 100;
+	icap(0); 	
 	return XST_SUCCESS;
 }
 
@@ -1086,7 +1086,7 @@ int program_user(u32 erase)
 	printf("program_user 0 with erase flag %x\n", erase ); 
 	int Status;
 	FlashData.percentage = 1;
-	if( erase )
+	/*if( erase )
 	{		
 		Status = SpiFlashDieErase(&Spi, 2);
 		FlashData.percentage = 10;
@@ -1105,24 +1105,24 @@ int program_user(u32 erase)
 			printf("program_user failed at sector erase in die 3\n");
 			return XST_FAILURE;
 		}
-	}
+	}*/
 	FlashData.percentage = 20;
 
-	Status = qspi_program_bin();
+	/*Status = qspi_program_bin();
 	if( Status != XST_SUCCESS )
 	{
 		printf("program_user failed at program\n");
 		return XST_FAILURE;	
-	}
+	}*/
 
 	FlashData.percentage = 60;
 
-	Status = qspi_verify_bin();
+	/*Status = qspi_verify_bin();
 	if( Status != XST_SUCCESS )
 	{
 		printf("program_user failed at verify\n");
 		return XST_FAILURE;	
-	}
+	}*/
 	
 	FlashData.percentage = 100;
 

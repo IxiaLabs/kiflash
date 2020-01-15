@@ -392,7 +392,7 @@ int kiflash_program_user()
 	{
 		printf("Program User Failed\n");				
 		return XST_FAILURE;
-	}*/							
+	}*/						
 	end = clock();
 	double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("Program user took  %f seconds to execute with Status 0x%x\n", cpu_time_used, Status); 
@@ -400,8 +400,8 @@ int kiflash_program_user()
 
 	printf("\n\rICAP\t\r\n");	
 	fflush(stdout);	
-	icap(0);	
-	FlashData.percentage = 100;
+	icap(0);
+	FlashData.percentage = 100; 	
 	return XST_SUCCESS;
 }
 

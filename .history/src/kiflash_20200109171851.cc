@@ -93,7 +93,7 @@ class Kiflash : public StreamingWorker {
       printf("****kiflash Execute after flashprog\n");        
 
       // while (!closed()) {
-      while (N != 100) {
+      while (N !=== 100) {
         int n = func_flashprogress();
         if (n != N)
         {

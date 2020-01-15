@@ -3,5 +3,8 @@
         "pcimem.h": "c",
         "mman.h": "c",
         "future": "cpp"
+    },
+    "files.exclude": {
+        "**/.history": true
     }
 }

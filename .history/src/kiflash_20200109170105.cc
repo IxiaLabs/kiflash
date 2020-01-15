@@ -93,7 +93,7 @@ class Kiflash : public StreamingWorker {
       printf("****kiflash Execute after flashprog\n");        
 
       // while (!closed()) {
-      while (N != 100) {
+      while (N !== 100) {
         int n = func_flashprogress();
         if (n != N)
         {
@@ -103,7 +103,7 @@ class Kiflash : public StreamingWorker {
         // std::this_thread::sleep_for(chrono::milliseconds(100));
       }    
 
-      if (N == 100)  
+      if (N === 100)  
       {
         send_factor(progress, 100);
       }

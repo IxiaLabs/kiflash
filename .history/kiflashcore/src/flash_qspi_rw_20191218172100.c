@@ -381,26 +381,26 @@ int kiflash_program_user()
 
 	printf("KiFlash Program User 1\n");	
 	fflush(stdout);	
-	for(int i = 0; i < 100; i++)
+	/*for(int i = 0; i < 30; i++)
 	{
-		sleep(1); //back d
+		sleep(10); //back d
 		FlashData.percentage += 1;		
 	}
-	
-	/*Status = program_user(1); 
+	*/
+	Status = program_user(1); 
 	if( Status != XST_SUCCESS )
 	{
 		printf("Program User Failed\n");				
 		return XST_FAILURE;
-	}*/							
+	}						
 	end = clock();
 	double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("Program user took  %f seconds to execute with Status 0x%x\n", cpu_time_used, Status); 
 	fflush(stdout);
 
 	printf("\n\rICAP\t\r\n");	
-	fflush(stdout);	
-	icap(0);	
+	fflush(stdout);
+	icap(0); 
 	FlashData.percentage = 100;
 	return XST_SUCCESS;
 }
@@ -1085,7 +1085,6 @@ int program_user(u32 erase)
 {
 	printf("program_user 0 with erase flag %x\n", erase ); 
 	int Status;
-	FlashData.percentage = 1;
 	if( erase )
 	{		
 		Status = SpiFlashDieErase(&Spi, 2);
@@ -1115,7 +1114,7 @@ int program_user(u32 erase)
 		return XST_FAILURE;	
 	}
 
-	FlashData.percentage = 60;
+	FlashData.percentage = 55;
 
 	Status = qspi_verify_bin();
 	if( Status != XST_SUCCESS )
@@ -2731,10 +2730,7 @@ int qspi_program_bin()
 			curpercentage = (double)((totalPage - NoOfPage)/totalPage)*100.0;
 			// printProgress((int)curpercentage);	
 			if (latched_percentage != curpercentage)
-			{
-				FlashData.percentage = 20 + (curpercentage * 40 / 100);
 				printf(" %d\r", (int)curpercentage);
-			}
 
 			fseek(fp, StartAddr, SEEK_SET);
 			unsigned char *buffer;	
@@ -2833,10 +2829,7 @@ int qspi_verify_bin()
 			curpercentage = (double)((totalPage - NoOfPage)/totalPage)*100.0;
 			// printProgress((int)curpercentage);	
 			if (latched_percentage != curpercentage)
-			{
-				FlashData.percentage = 60 + (curpercentage * 40 / 100);
 				printf(" %d\r", (int)curpercentage);
-			}
 
 			fseek(fp, StartAddr, SEEK_SET);
 			unsigned char *buffer;	

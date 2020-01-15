@@ -17,8 +17,9 @@ class Kiflash : public StreamingWorker {
     Kiflash(Callback *data, Callback *complete, Callback *error_callback,  v8::Local<v8::Object> & options) 
           : StreamingWorker(data, complete, error_callback){
         printf("****Kiflash entered\n");
-        N = -1;        
-        handle = dlopen("/home/ixiaadmin/git/kiflash/bin/Linux/libFlashProvider.so", RTLD_LAZY);
+        N = -1;
+        handle = NULL;
+        // handle = dlopen("/home/ixiaadmin/git/kiflash/bin/Linux/libFlashProvider.so", RTLD_LAZY);
 
         if (!handle) {
             /* fail to load the library */
@@ -101,14 +102,8 @@ class Kiflash : public StreamingWorker {
           send_factor(progress, N);
         }
         // std::this_thread::sleep_for(chrono::milliseconds(100));
-      }    
-
-      if (N == 100)  
-      {
-        send_factor(progress, 100);
-      }
-    
-      int ret = fut.get(); 
+      }      
+      int ret = fut.get();               
       // int result = r.get();
     }
   private:
