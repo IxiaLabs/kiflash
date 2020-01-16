@@ -296,47 +296,26 @@ int kiflash_init()
    	memset(binfilename, '\0', sizeof(binfilename));
 	FlashData.filename = binfilename;
 	FlashData.percentage = 0;
-   	//if (getcwd(pathname, sizeof(pathname)) != NULL) {
-    //	printf("Current working dir: %s\n", pathname);
-   	//} else {
-    //	perror("getcwd() error");
-    //	return XST_FAILURE;
-   	//}	
-	// FlashData.path = pathname;
+
 	memset(pathname, '\0', sizeof(pathname));
-	// pathname[PATH_MAX] = "/home/ixiaadmin/Downloads";
 	strcpy(pathname, "/home/ixiaadmin/Downloads");
 	FlashData.path = pathname;	
 	printf("Path: %s current latched path %s\n", pathname, FlashData.path);
 	fflush(stdout);
-	
 
-	printf("kiflash_init 1\n");
     int choice, exit_flag = 0;
     int Status;
    	u32 SectCount=1, StartAddr, NoByteToRead;	
 	int nbytes_temp=16;
 	int input_deci_data=0;	
-	// Status = kiflash_init(&FlashData);
-	// if (Status != XST_SUCCESS) {
-	//	printf("\n\rfailed at kiflash_init\n\r");
-	// 	return XST_FAILURE;
-	// }
 
-	printf("kiflash_init 2\n");
 	pcimem_init(&Pci);
 
-	printf("kiflash_init 3\n");	
 	init_platform();
-	
-	printf("kiflash_init 4\n");		
+
 	if (qspi_init_flag ==0)
 	{
-		// printf("\n\r *flash_qspi_rw before System_init_startup 1\n\r");
-		// fflush(stdout);
 		Status = System_init_startup ();
-		// printf("\n\r *flash_qspi_rw before System_init_startup 2\n\r");
-		// fflush(stdout);		
 		if (Status != XST_SUCCESS) {
 			return XST_FAILURE;
 		} else qspi_init_flag=1;
@@ -360,12 +339,9 @@ int kiflash_getprogress()
 
 int kiflash_program_user()
 {
-	printf("\n\rKiFlash Program User test\t\r\n");					
+	printf("\n\rKiFlash Program User\t\r\n");					
 	fflush(stdout);
 	kiflash_init();	
-
-	printf("KiFlash Program User 0.5\n");	
-	fflush(stdout);					
 
 	clock_t start, end;
 	int Status;
@@ -378,21 +354,24 @@ int kiflash_program_user()
 	print_kiflash(&FlashData);
 
 	FlashData.percentage = 0;
-
-	printf("KiFlash Program User 1\n");	
-	fflush(stdout);	
+	// debug program user begin
+	/*
 	for(int i = 0; i < 100; i++)
 	{
 		sleep(1); //back d
 		FlashData.percentage += 1;		
 	}
+	*/ 
+	// debug program user end
 	
-	/*Status = program_user(1); 
+	// real program_user begin
+	Status = program_user(1); 
 	if( Status != XST_SUCCESS )
 	{
 		printf("Program User Failed\n");				
 		return XST_FAILURE;
-	}*/							
+	}							
+	// real program_user end
 	end = clock();
 	double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("Program user took  %f seconds to execute with Status 0x%x\n", cpu_time_used, Status); 
@@ -404,579 +383,6 @@ int kiflash_program_user()
 	FlashData.percentage = 100;
 	return XST_SUCCESS;
 }
-
-/*****************************************************************************/
-/**
-*
-* Main function to run the quad flash update.
-*
-* @param	None
-*
-* @return	XST_SUCCESS if successful else XST_FAILURE.
-*
-* @note		None
-*
-******************************************************************************/
-
-/* int main(void)
-{
-	printf("\n\rflash_qspi_rw entered\n\r");
-    int choice, exit_flag = 0;
-    int Status;
-   	u32 SectCount=1, StartAddr, NoByteToRead;
-	char* hex= FLASH_TEST_ADDRESS1;
-	int nbytes_temp=16;
-	int input_deci_data=0;	
-	Status = kiflash_init(&FlashData);
-	if (Status != XST_SUCCESS) {
-		printf("\n\rfailed at kiflash_init\n\r");
-		return XST_FAILURE;
-	}
-
-	pcimem_init(&Pci);
-	init_platform();
-	
-	if (qspi_init_flag ==0)
-	{
-		// printf("\n\r *flash_qspi_rw before System_init_startup 1\n\r");
-		// fflush(stdout);
-		Status = System_init_startup ();
-		// printf("\n\r *flash_qspi_rw before System_init_startup 2\n\r");
-		// fflush(stdout);		
-		if (Status != XST_SUCCESS) {
-			return XST_FAILURE;
-		} else qspi_init_flag=1;
-
-	}
-		StartAddr = FLASH_TEST_ADDRESS0;
-		// NoByteToRead = 512;
-		// SectCount = 512;
-		//  printf("\n\r *flash_qspi_rw before System_init_startup 3\n\r");
-		// fflush(stdout);		
-		while(exit_flag != 1) {
-			printf("\n\r*******************************************************************");
-			printf("\n\r*******************************************************************\n\r");
-    		printf("\n\rChoose from options below: \r\n");
-			printf(" 0: Reflash whole device\r\n");
-    	    printf(" 1: Read Quad SPI flash ID\r\n");
-			printf(" 2: Set Path\r\n");
-			printf(" 3: Set user bin filename\r\n");
-			printf(" 4: Program Golden\r\n");
-			printf(" 5: Program User\r\n");
-			printf(" 6: Program Timer\r\n");
-			printf(" 7: ICAP\r\n");
-    	    printf(" 8: Erase Quad SPI flash\r\n");
-    	    printf(" 9: Blank Check Quad SPI flash\r\n");
-    	    printf(" 10: Program (*.bin)\r\n");
-    	    printf(" 11: Read Quad SPI flash\r\n");
-			printf(" 12: Check Flag Status\r\n");
-			printf(" 13: Enable Quad\r\n");
-			printf(" 14: Verify (*.bin)\r\n");						
-			printf(" 15: PciSweep\r\n");
-			printf(" 16: Erase sector SPI flash\r\n");
-			printf(" 17: Corrupt data to location in flash\r\n");
-			fflush(stdout);
-			int choice;
-
-			scanf("%d", &choice);
-			printf(" You entered: %d\n", choice);
-
-    		switch(choice) {
-    			case 0:
-					printf("\n\r\t Re image whole flash\t\r\n");
-					clock_t start, end, total_start, total_end;					
-					total_start = clock();
-
-					printf("\n\rErase Flash\t\r\n");
-					fflush(stdout);										
-					start = clock();
-					Status = SpiFlashDieErase(&Spi, 0);
-					if( Status != XST_SUCCESS )
-					{
-						printf("erase die failed at erase die 0\n");						
-						break;
-					}
-
-					Status = SpiFlashDieErase(&Spi, 1);
-					if( Status != XST_SUCCESS )
-					{
-						printf("erase die failed at erase die 1\n");						
-						break;
-					}								
-
-					Status = SpiFlashDieErase(&Spi, 2);
-					if( Status != XST_SUCCESS )
-					{
-						printf("erase die failed at erase die 2\n");						
-						break;
-					}								
-
-					Status = SpiFlashDieErase(&Spi, 3);
-					if( Status != XST_SUCCESS )
-					{
-						printf("erase die failed at erase die 3\n");						
-						break;
-					}								
-
-					end = clock();
-					double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-					printf("Erase flash took  %f seconds to execute\n", cpu_time_used); 
-					fflush(stdout);
-										
-					sleep(1);
-					printf("\n\rProgram timer1\t\r\n");
-					start = clock();															
-					FlashData.filename =  IMAGE_NAME_TIMER1;
-					FlashData.baseAddr = FLASH_TIMER1_IMAGE_ADDRESS;
-					FlashData.eraseStartAddr = FLASH_TIMER1_ERASE_START_ADDRESS;
-					FlashData.eraseEndAddr = FLASH_TIMER1_ERASE_END_ADDRESS;
-					Status = program_timer(1, 1);
-					if( Status != XST_SUCCESS )
-					{
-						printf("Program timer1 Failed\n");						
-						break;
-					}						
-					end = clock();
-					cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-					printf("Program timer %d took  %f seconds to execute with Status 0x%x\n", 1, cpu_time_used, Status); 
-					fflush(stdout);
-					sleep(1);
-					printf("\n\rProgram timer2\t\r\n");
-					start = clock();															
-					FlashData.filename =  IMAGE_NAME_TIMER2;
-					FlashData.baseAddr = FLASH_TIMER2_IMAGE_ADDRESS;
-					FlashData.eraseStartAddr = FLASH_TIMER2_ERASE_START_ADDRESS;
-					FlashData.eraseEndAddr = FLASH_TIMER2_ERASE_END_ADDRESS;
-					Status = program_timer(2, 1);
-					if( Status != XST_SUCCESS )
-					{
-						printf("Program timer2 Failed\n");						
-						break;
-					}						
-					end = clock();
-					cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-					printf("Program timer %d took  %f seconds to execute with Status 0x%x\n", 2, cpu_time_used, Status); 
-					fflush(stdout);
-					sleep(1);
-
-					printf("\n\rProgram Golden\t\r\n");
-					fflush(stdout);						
-					start = clock();
-					FlashData.filename = IMAGE_NAME_GOLDEN;
-					FlashData.baseAddr = FLASH_GOLDEN_IMAGE_ADDRESS;
-					FlashData.eraseStartAddr = FLASH_GOLDEN_ERASE_START_ADDRESS;
-					FlashData.eraseEndAddr = FLASH_GOLDEN_ERASE_END_ADDRESS;
-					Status = program_golden(0);
-					if( Status != XST_SUCCESS )
-					{
-						printf("Program Golden Failed\n");						
-						break;
-					}								
-					end = clock();
-					cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-					printf("Program golden took  %f seconds to execute with Status 0x%x\n", cpu_time_used, Status); 
-					fflush(stdout);
-
-					printf("\n\rProgram User\t\r\n");					
-					fflush(stdout);
-					start = clock();
-					FlashData.filename = IMAGE_NAME_USER;
-					FlashData.baseAddr = FLASH_USER_IMAGE_ADDRESS;
-					FlashData.eraseStartAddr = FLASH_USER_ERASE_START_ADDRESS;
-					FlashData.eraseEndAddr = FLASH_USER_ERASE_END_ADDRESS;
-					Status = program_user(0);
-					if( Status != XST_SUCCESS )
-					{
-						printf("Program User Failed\n");						
-						break;
-					}						
-					end = clock();
-					cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-					printf("Program user took  %f seconds to execute with Status 0x%x\n", cpu_time_used, Status); 
-					fflush(stdout);
-
-					printf("\n\rICAP\t\r\n");	
-					fflush(stdout);
-					icap(0);	
-					total_end = clock();
-					cpu_time_used = ((double) (total_end - total_start)) / CLOCKS_PER_SEC;
-					printf("Program whole flash took  %f seconds to execute\n", cpu_time_used); 
-					break;
-				case 1:
-				{
-					printf("\n\r\t Read Quad SPI flash\t\r\n");
-					fflush(stdout);
-					qspi_flash_geo();
-					printf("\n\rPress any Key to Main Menu\r\n");
-					fflush(stdout);					
-					print_kiflash(&FlashData);
-					break;
-				}
-				case 2:
-				{
-					printf("\n\rSet Path: ");					
-				   	memset(pathname, '\0', sizeof(pathname));
-					
-					scanf("%s", pathname);					
-					FlashData.path = pathname;	
-					printf("You entered: %s current latched path %s\n", pathname, FlashData.path);
-					fflush(stdout);
-					break;
-				}
-				case 3:
-				{
-					printf("\n\rSet user bin filename: ");					
-				   	memset(binfilename, '\0', sizeof(binfilename));
-					
-					scanf("%s", binfilename);	
-					FlashData.filename = binfilename;	
-					printf("You entered: %s current latched filename %s\n", binfilename, FlashData.filename);
-					fflush(stdout);				   	
-					break;
-				}				
-				case 4:
-				{ 
-					clock_t start, end;					
-					printf("\n\rProgram Golden\t\r\n");
-					fflush(stdout);					
-					start = clock();
-					FlashData.filename = IMAGE_NAME_GOLDEN;
-					FlashData.baseAddr = FLASH_GOLDEN_IMAGE_ADDRESS;
-					FlashData.eraseStartAddr = FLASH_GOLDEN_ERASE_START_ADDRESS;
-					FlashData.eraseEndAddr = FLASH_GOLDEN_ERASE_END_ADDRESS;
-					Status = program_golden(1);
-					end = clock();
-					double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-					printf("Program golden took  %f seconds to execute with Status 0x%x\n", cpu_time_used, Status); 
-					fflush(stdout);
-					break;
-				}		
-				case 5:
-				{
-					clock_t start, end;					
-					printf("\n\rProgram User\t\r\n");					
-					fflush(stdout);
-					start = clock();
-					FlashData.filename = IMAGE_NAME_USER;
-					FlashData.baseAddr = FLASH_USER_IMAGE_ADDRESS;
-					FlashData.eraseStartAddr = FLASH_USER_ERASE_START_ADDRESS;
-					FlashData.eraseEndAddr = FLASH_USER_ERASE_END_ADDRESS;
-					Status = program_user(1);
-					end = clock();
-					double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-					printf("Program user took  %f seconds to execute with Status 0x%x\n", cpu_time_used, Status); 
-					fflush(stdout);
-					break;
-				}	
-				case 6:
-				{				
-					clock_t start, end;		
-					printf("\n\rTimer ID to program (1,2): ");					
-					int input_deci_data;    	    		
-					scanf("%d", &input_deci_data);
-					printf("You entered: %d\n", input_deci_data);
-
-					if(input_deci_data == 1)
-					{
-						start = clock();															
-						FlashData.filename =  IMAGE_NAME_TIMER1;
-						FlashData.baseAddr = FLASH_TIMER1_IMAGE_ADDRESS;
-						FlashData.eraseStartAddr = FLASH_TIMER1_ERASE_START_ADDRESS;
-						FlashData.eraseEndAddr = FLASH_TIMER1_ERASE_END_ADDRESS;
-						Status = program_timer(input_deci_data, 1);
-						end = clock();
-						double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-						printf("Program timer %d took  %f seconds to execute with Status 0x%x\n", input_deci_data, cpu_time_used, Status); 
-						fflush(stdout);
-					}
-					else if (input_deci_data == 2)
-					{
-						start = clock();															
-						FlashData.filename =  IMAGE_NAME_TIMER2;
-						FlashData.baseAddr = FLASH_TIMER2_IMAGE_ADDRESS;
-						FlashData.eraseStartAddr = FLASH_TIMER2_ERASE_START_ADDRESS;
-						FlashData.eraseEndAddr = FLASH_TIMER2_ERASE_END_ADDRESS;
-						Status = program_timer(input_deci_data, 1);
-						end = clock();
-						double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-						printf("Program timer %d took  %f seconds to execute with Status 0x%x\n", input_deci_data, cpu_time_used, Status); 
-						fflush(stdout);
-					}
-					else
-					{
-						printf("Invalid Timer ID specified\n");
-					}				
-
-					fflush(stdout);		
-
-					break;
-				}
-				case 7:
-				{
-					printf("\n\rDie number to Jump (0,2): ");					
-					int input_deci_data;    	    		
-					scanf("%d", &input_deci_data);
-					printf("You entered: %d\n", input_deci_data);
-
-					if(input_deci_data == 0 || input_deci_data == 2)
-					{
-						icap(input_deci_data);	
-					}
-					else
-					{
-						printf("Invalid jump die specified\n");
-					}				
-
-					fflush(stdout);		
-					break;
-				}
-				case 8:
-				{
-					printf("\n\rDie number to erase (0-3): ");					
-					int input_deci_data;    	    		
-					scanf("%d", &input_deci_data);
-					printf("You entered: %d\n", input_deci_data);
-									
-					qspi_flash_erase_main(Address, input_deci_data);
-					fflush(stdout);
-					break;
-				}
-				case 9:
-				{
-					printf ("\n\rQuad SPI flash Blank Check:\n\r");
-					printf("\n\rBlank Check start address (hex): ");
-					// StartAddr = 0;
-					// NoByteToRead = 256;
-					printf("\n\rStart Address (hex): ");
-					unsigned int input_deci_data;
-					scanf("%x", &input_deci_data);
-					
-					printf("You entered: 0x%x\n", input_deci_data);
-					
-					StartAddr = input_deci_data;
-					printf("\n\rNumber of Bytes to read (hex): ");
-					input_deci_data = 0;
-					scanf("%x", &input_deci_data);
-					printf("You entered: 0x%x\n", input_deci_data);
-					NoByteToRead = input_deci_data;
-
-					Status = Spi_Blank_Check(StartAddr, NoByteToRead);
-					if (Status != XST_SUCCESS) {
-						printf("\n\r\n\r\t\tBlank Check Operation Fail!.\r\n");
-					}else  printf("\n\r\n\rBlank Check Operation Completed without error.\r\n");
-								
-					fflush(stdout);
-					break;
-				}
-				case 10:
-				{
-					clock_t start, end;					
-					printf("\r\nProgram (*.bin)\r\n");
-					printf("\n\rDie number to program (0-3): ");					
-					int input_deci_data;    	    		
-					scanf("%d", &input_deci_data);
-					printf("You entered: %d\n", input_deci_data);
-					start = clock();
-					Status = DownloadSerialDataToQSPIFlash(input_deci_data);
-					end = clock();
-					double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-					printf("Program flash took  %f seconds to execute \n", cpu_time_used); 
-					fflush(stdout);
-					break;
-				}	
-				case 11:
-				{
-					clock_t start, end;
-					printf ("\n\r\n\rRead Quad SPI flash:");
-					printf("\n\rStart Address (hex): ");
-					unsigned int input_deci_data;
-					scanf("%x", &input_deci_data);
-					
-					printf("You entered: 0x%x\n", input_deci_data);
-					
-					StartAddr = input_deci_data;
-					printf("\n\rNumber of Bytes to read (hex): ");
-					input_deci_data = 0;
-					scanf("%x", &input_deci_data);
-					printf("You entered: 0x%x\n", input_deci_data);
-					NoByteToRead = input_deci_data;
-					if( NoByteToRead )
-					{
-						start = clock();
-						qspi_read_flash(StartAddr, NoByteToRead);					
-						end = clock();
-						double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-						printf("Read Quad SPI flash took %f seconds to execute \n", cpu_time_used); 
-						fflush(stdout);
-					}
-
-					printf("\n\rPress any Key to Main Menu\r\n");
-					fflush(stdout);
-					break;
-				}
-				case 12:
-				{
-					printf("\n\r\t Read FlagStatus\t\r\n");
-					fflush(stdout);
-					int Status = SpiFlashGetStatusPrint(&Spi, 1);	
-					int FlagStatus = SpiFlashReadflagstatus(&Spi, 1);
-					SpiFlashClrflagstatus(&Spi);
-					// printf("FlagStatus Status 0x%X flagStatus 0x%x\n", Status, FlagStatus);
-					fflush(stdout);
-					break;
-				}		
-				case 13:
-				{
-					printf("\n\r\t Enable Quad flash\t\r\n");
-					fflush(stdout);
-					Status = SpiFlashQuadEnable(&Spi);
-					if (Status != XST_SUCCESS) {
-						printf("Enable Quad flash failed Status 0x%X\n", Status);
-						fflush(stdout);
-						return XST_FAILURE;						
-					}
-					fflush(stdout);
-					break;
-				}
-				case 14:
-				{
-					clock_t start, end;										
-					printf("\r\nVerify (*.bin)\r\n");
-					printf("\n\rInput 1 golden 2 user 3 timer1 4 timer2: ");					
-					int input_deci_data;    	    		
-					scanf("%d", &input_deci_data);
-					printf("You entered: %d\n", input_deci_data);
-					start = clock();
-					if (input_deci_data == 1)
-					{
-						FlashData.filename = IMAGE_NAME_GOLDEN;
-						FlashData.baseAddr = FLASH_GOLDEN_IMAGE_ADDRESS;
-						FlashData.eraseStartAddr = FLASH_GOLDEN_ERASE_START_ADDRESS;
-						FlashData.eraseEndAddr = FLASH_GOLDEN_ERASE_END_ADDRESS;
-						Status = qspi_verify_bin();
-						if( Status != XST_SUCCESS )
-						{
-							printf("verify_golden failed at verify\n");							
-						}
-					}
-					else if (input_deci_data == 2)
-					{
-						FlashData.filename = IMAGE_NAME_USER;
-						FlashData.baseAddr = FLASH_USER_IMAGE_ADDRESS;
-						FlashData.eraseStartAddr = FLASH_USER_ERASE_START_ADDRESS;
-						FlashData.eraseEndAddr = FLASH_USER_ERASE_END_ADDRESS;
-						Status = qspi_verify_bin();
-						if( Status != XST_SUCCESS )
-						{
-							printf("verify_user failed at verify\n");							
-						}					
-					}
-					else if (input_deci_data == 3)
-					{
-						FlashData.filename =  IMAGE_NAME_TIMER1;
-						FlashData.baseAddr = FLASH_TIMER1_IMAGE_ADDRESS;
-						FlashData.eraseStartAddr = FLASH_TIMER1_ERASE_START_ADDRESS;
-						FlashData.eraseEndAddr = FLASH_TIMER1_ERASE_END_ADDRESS;
-						Status = qspi_verify_bin();
-						if( Status != XST_SUCCESS )
-						{
-							printf("verify_timer1 failed at verify\n");							
-						}							
-					}
-					else if (input_deci_data == 4)
-					{
-						FlashData.filename =  IMAGE_NAME_TIMER2;
-						FlashData.baseAddr = FLASH_TIMER2_IMAGE_ADDRESS;
-						FlashData.eraseStartAddr = FLASH_TIMER2_ERASE_START_ADDRESS;
-						FlashData.eraseEndAddr = FLASH_TIMER2_ERASE_END_ADDRESS;						
-						if( Status != XST_SUCCESS )
-						{
-							printf("verify_timer2 failed at verify\n");							
-						}							
-					}
-					else 
-					{
-						printf("Invalid verify destination specified\n");
-					}				
-
-
-					// Status = VerifySerialDataToQSPIFlash(input_deci_data);
-					end = clock();
-					double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-					printf("Verify flash took %f seconds to execute \n", cpu_time_used); 
-					fflush(stdout);
-					break;
-				}
-				case 15:
-				{
-					clock_t start, end;
-					printf("\r\nPciSweep\r\n");
-					printf("\n\rStart Addr (hex): ");					
-					unsigned int input_deci_data;    	    		
-					scanf("%x", &input_deci_data);
-					printf("You entered: 0x%x\n", input_deci_data);
-					start = clock();					
-					Status = PciSweep(&Spi, input_deci_data);
-					end = clock();
-					double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-					printf("PciSweep took %f seconds to execute \n", cpu_time_used);					
-					fflush(stdout);		
-					break;
-				}
-				case 16:
-				{
-					printf("\n\rAddrto erase (hex): ");
-										
-					unsigned int input_deci_data;    	    		
-					scanf("%x", &input_deci_data);
-					Status = SpiFlashSectorErase(&Spi, input_deci_data);	
-					if (Status != XST_SUCCESS) {
-						printf("sector erase failed Status 0x%X\n", Status);
-					} else {
-						printf("sector erase command sent\n");
-					}																		
-					fflush(stdout);
-					break;
-				}
-				case 17:
-				{	
-					printf("\n\rWrite flash 8 bytes 0,1,2,3,4,5,6,7 at starting addr: ");					
-					printf("\n\rStart Address(hex): ");
-					unsigned int input_deci_data;    	    		
-					scanf("%x", &input_deci_data);
-					printf("You entered: 0x%x\n", input_deci_data);
-										
-					unsigned char *buffer;	
-					buffer = (unsigned char *)malloc(8 * sizeof(unsigned char)); // Enough memory for file + \0
-					for(int Index = 0; Index < PAGE_SIZE; Index++)
-					{
-						buffer[Index] = Index;
-					}
-					
-					Status  = qspi_write_flash(input_deci_data, buffer);
-					if (Status != XST_SUCCESS) {
-						printf("rWrite Quad SPI flash failed Status 0x%X\n", Status);
-					} else {
-						printf("rWrite Quad SPI flash %d bytes to addr 0x%X \n", sizeof(buffer), input_deci_data);
-					}
-					
-					fflush(stdout);
-					break;
-				}
-				default:
-				{
-					break;
-				}
-			}
-			if(exit_flag != 1) {
-			}
-	}
-	cleanup_platform();
-	
-    return 0;
-}
-*/
-
 
 /*****************************************************************************/
 /**
@@ -1230,7 +636,8 @@ int icap(u32 die)
 ******************************************************************************/
 int System_init_startup ()
 {
-	printf("System_init_startup 1\n");		
+	printf("System_init_startup\n");		
+	fflush(stdout);
 	int Status;
 	XSpi_Config *ConfigPtr;	
 	printf("\n\rflash_qspi_rw System_init_startup 1 SPI_DEVICE_ID %d", SPI_DEVICE_ID);		
@@ -1247,35 +654,24 @@ int System_init_startup ()
 				  ConfigPtr->BaseAddress);					  
 	if (Status != XST_SUCCESS) {
 		return XST_FAILURE;
-	}
-	printf("System_init_startup 2\n");			
-	fflush(stdout);
-//	Status = SetupInterruptSystem(&Spi);
-//	if(Status != XST_SUCCESS) {
-//		return XST_FAILURE;
-//	}
+	}	
+
 	XSpi_SetStatusHandler(&Spi, &Spi, (XSpi_StatusHandler)SpiHandler);
 	Status = XSpi_SetOptions(&Spi, XSP_MASTER_OPTION |
 				 XSP_MANUAL_SSELECT_OPTION);
 	if(Status != XST_SUCCESS) {
 		return XST_FAILURE;
 	}
-	printf("System_init_startup 3\n");			
-	fflush(stdout);	
 	Status = XSpi_SetSlaveSelect(&Spi, SPI_SELECT);
 	if(Status != XST_SUCCESS) {
 		return XST_FAILURE;
 	}
-	printf("System_init_startup 4\n");			
-	fflush(stdout);	
 
 	XSpi_Start(&Spi);
 	Status = SpiFlashWriteEnable(&Spi);
 	if(Status != XST_SUCCESS) {
 		return XST_FAILURE;
 	}
-	printf("System_init_startup 5\n");			
-	fflush(stdout);	
 	return XST_SUCCESS;
 }
 /*****************************************************************************/
@@ -1374,10 +770,7 @@ int qspi_ease_entire_flash(void)
 		if(Status != XST_SUCCESS) {
 			return XST_FAILURE;
 		} else 	printf("\n\rEntire flash erase takes several minutes \n\r \n\rPlease wait .....\n\r");
-//		Status = SpiFlashQuadEnable(&Spi);
-//		if (Status != XST_SUCCESS) {
-//			return XST_FAILURE;
-//		}
+
 		printf("\n\rEntire flash erase completed\n\r");
 	return XST_SUCCESS;
 }

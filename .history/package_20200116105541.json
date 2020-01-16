@@ -1,0 +1,52 @@
+{
+    "name": "kiflash",
+    "version": "0.1.0",
+    "license": "MIT",
+    "author": {
+        "name": "Thomas Li",
+        "email": "thomas.li@keysight.com",
+        "url": "https://github.com/IxiaLabs/kiflash"
+    },
+    "description": "io.js/node.js mmap bindings revisited.",
+    "homepage": "https://github.com/IxiaLabs/kiflash",
+    "keywords": [
+        "low level",
+        "file",
+        "memory mapped",
+        "mmap",
+        "advise",
+        "sync",
+        "write",
+        "shared memory",
+        "C++",
+        "performance"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/IxiaLabs/kiflash.git"
+    },
+    "bugs": {
+        "url": "http://github.com/IxiaLabs/kiflash/issues"
+    },
+    "scripts": {
+        "clean": "rm -rf build ./build/es-release/mmap-io.d.ts",
+        "build": "yarn build-addon && yarn build-es && yarn test",
+        "build-addon": "node-gyp configure && node-gyp rebuild",
+        "build-es": "./node_modules/typescript/bin/tsc && cp ./build/es-release/mmap-io.d.ts ./",
+        "prepublish": "yarn build",
+        "install": "yarn build-addon",
+        "watch": "while true; do (yarn build; inotifywait -qre close_write,moved_to --exclude '\\.git' ./src/; ) done;"
+    },
+    "devDependencies": {
+        "errno": "*",
+        "typescript": "^3.3.3333"
+    },
+    "dependencies": {
+        "@types/node": "^11.10.5",
+        "bindings": "^1.5.0",
+        "livescript": "^1.6.0",
+        "nan": "^2.14.0",
+        "streaming-worker": "^1.0.1",
+        "streaming-worker-sdk": "^0.9.3"
+    }
+}
