@@ -298,7 +298,7 @@ int kiflash_init()
 	FlashData.percentage = 0;
 
 	memset(pathname, '\0', sizeof(pathname));
-	strcpy(pathname, "/opt/ixia/A400G/current/fpga");
+	strcpy(pathname, "/home/ixiaadmin/Downloads");
 	FlashData.path = pathname;	
 	printf("Path: %s current latched path %s\n", pathname, FlashData.path);
 	fflush(stdout);
@@ -355,24 +355,24 @@ int kiflash_program_user()
 
 	FlashData.percentage = 0;
 	// debug program user begin
-	/*
+	
 	for(int i = 0; i < 100; i++)
 	{
 		sleep(1); //back d
 		FlashData.percentage += 1;		
 	}
-	*/
+	
 	// debug program user end
 	
 	// real program_user begin
-	
+	/*
 	Status = program_user(1); 
 	if( Status != XST_SUCCESS )
 	{
 		printf("Program User Failed\n");				
 		return XST_FAILURE;
 	}
-
+	*/							
 	// real program_user end
 	end = clock();
 	double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;

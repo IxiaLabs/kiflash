@@ -4,7 +4,7 @@
 #include <dlfcn.h>
 #include "streaming-worker.h"
 #include <future>  
-
+const int version = 0x01;
 using namespace std;
 void *handle;
 void (*func_test)();
@@ -16,9 +16,9 @@ class Kiflash : public StreamingWorker {
   public:
     Kiflash(Callback *data, Callback *complete, Callback *error_callback,  v8::Local<v8::Object> & options) 
           : StreamingWorker(data, complete, error_callback){
-        printf("****Kiflash entered\n");
+        printf("Kiflash entered with version %d\n", version);
         N = -1;        
-        handle = dlopen("/home/ixiaadmin/git/kiflash/bin/Linux/libFlashProvider.so", RTLD_LAZY);
+        handle = dlopen("/opt/ixia/mmap/libFlashProvider.so", RTLD_LAZY);
 
         if (!handle) {
             /* fail to load the library */

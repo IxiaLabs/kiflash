@@ -298,7 +298,7 @@ int kiflash_init()
 	FlashData.percentage = 0;
 
 	memset(pathname, '\0', sizeof(pathname));
-	strcpy(pathname, "/opt/ixia/A400G/current/fpga");
+	strcpy(pathname, "/home/ixiaadmin/Downloads");
 	FlashData.path = pathname;	
 	printf("Path: %s current latched path %s\n", pathname, FlashData.path);
 	fflush(stdout);
