@@ -37,13 +37,13 @@ CFLAGS_CC_Debug := \
 	-std=c++11
 
 INCS_Debug := \
-	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/include/node \
-	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/src \
-	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/deps/openssl/config \
-	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/deps/openssl/openssl/include \
-	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/deps/uv/include \
-	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/deps/zlib \
-	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/deps/v8/include \
+	-I/home/ixiaadmin/.cache/node-gyp/10.19.0/include/node \
+	-I/home/ixiaadmin/.cache/node-gyp/10.19.0/src \
+	-I/home/ixiaadmin/.cache/node-gyp/10.19.0/deps/openssl/config \
+	-I/home/ixiaadmin/.cache/node-gyp/10.19.0/deps/openssl/openssl/include \
+	-I/home/ixiaadmin/.cache/node-gyp/10.19.0/deps/uv/include \
+	-I/home/ixiaadmin/.cache/node-gyp/10.19.0/deps/zlib \
+	-I/home/ixiaadmin/.cache/node-gyp/10.19.0/deps/v8/include \
 	-I$(srcdir)/node_modules/nan \
 	-I$(srcdir)/node_modules/streaming-worker-sdk \
 	-I$(srcdir)/kiflashcore/src
@@ -80,13 +80,13 @@ CFLAGS_CC_Release := \
 	-std=c++11
 
 INCS_Release := \
-	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/include/node \
-	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/src \
-	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/deps/openssl/config \
-	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/deps/openssl/openssl/include \
-	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/deps/uv/include \
-	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/deps/zlib \
-	-I/home/ixiaadmin/.cache/node-gyp/10.17.0/deps/v8/include \
+	-I/home/ixiaadmin/.cache/node-gyp/10.19.0/include/node \
+	-I/home/ixiaadmin/.cache/node-gyp/10.19.0/src \
+	-I/home/ixiaadmin/.cache/node-gyp/10.19.0/deps/openssl/config \
+	-I/home/ixiaadmin/.cache/node-gyp/10.19.0/deps/openssl/openssl/include \
+	-I/home/ixiaadmin/.cache/node-gyp/10.19.0/deps/uv/include \
+	-I/home/ixiaadmin/.cache/node-gyp/10.19.0/deps/zlib \
+	-I/home/ixiaadmin/.cache/node-gyp/10.19.0/deps/v8/include \
 	-I$(srcdir)/node_modules/nan \
 	-I$(srcdir)/node_modules/streaming-worker-sdk \
 	-I$(srcdir)/kiflashcore/src

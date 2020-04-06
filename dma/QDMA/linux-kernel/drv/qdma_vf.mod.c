@@ -1,9 +1,6 @@
-#include <linux/build-salt.h>
 #include <linux/module.h>
 #include <linux/vermagic.h>
 #include <linux/compiler.h>
-
-BUILD_SALT;
 
 MODULE_INFO(vermagic, VERMAGIC_STRING);
 MODULE_INFO(name, KBUILD_MODNAME);
@@ -188,4 +185,4 @@ MODULE_ALIAS("pci:v000010EEd0000C148sv*sd*bc*sc*i*");
 MODULE_ALIAS("pci:v000010EEd0000C248sv*sd*bc*sc*i*");
 MODULE_ALIAS("pci:v000010EEd0000C348sv*sd*bc*sc*i*");
 
-MODULE_INFO(srcversion, "F43353D42933EF2D0A8DA0A");
+MODULE_INFO(srcversion, "FCCBA4116A5358B909DFA4A");
