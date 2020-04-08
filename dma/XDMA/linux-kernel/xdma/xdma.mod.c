@@ -1,6 +1,9 @@
+#include <linux/build-salt.h>
 #include <linux/module.h>
 #include <linux/vermagic.h>
 #include <linux/compiler.h>
+
+BUILD_SALT;
 
 MODULE_INFO(vermagic, VERMAGIC_STRING);
 MODULE_INFO(name, KBUILD_MODNAME);
@@ -24,55 +27,55 @@ __used
 __attribute__((section(".modinfo"))) =
 "depends=";
 
-MODULE_ALIAS("pci:v000010EEd0000903Fsv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00009038sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00009028sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00009018sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00009034sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00009024sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00009014sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00009032sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00009022sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00009012sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00009031sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00009021sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00009011sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00008011sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00008012sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00008014sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00008018sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00008021sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00008022sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00008024sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00008028sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00008031sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00008032sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00008034sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00008038sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00007011sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00007012sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00007014sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00007018sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00007021sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00007022sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00007024sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00007028sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00007031sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00007032sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00007034sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00007038sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00006828sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00006830sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00006928sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00006930sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00006A28sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00006A30sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00006D30sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00004808sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00004828sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00004908sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00004A28sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00004B28sv*sd*bc*sc*i*");
-MODULE_ALIAS("pci:v000010EEd00002808sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d0000903Fsv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00009038sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00009028sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00009018sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00009034sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00009024sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00009014sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00009032sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00009022sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00009012sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00009031sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00009021sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00009011sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00008011sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00008012sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00008014sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00008018sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00008021sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00008022sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00008024sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00008028sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00008031sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00008032sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00008034sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00008038sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00007011sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00007012sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00007014sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00007018sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00007021sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00007022sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00007024sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00007028sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00007031sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00007032sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00007034sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00007038sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00006828sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00006830sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00006928sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00006930sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00006A28sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00006A30sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00006D30sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00004808sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00004828sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00004908sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00004A28sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00004B28sv*sd*bc*sc*i*");
+MODULE_ALIAS("pci:v0000A400d00002808sv*sd*bc*sc*i*");
 
-MODULE_INFO(srcversion, "FE994E934AE7021CE74856F");
+MODULE_INFO(srcversion, "DD086064EDE22CA95301F01");

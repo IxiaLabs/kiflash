@@ -63,7 +63,7 @@ static int eth_qdma_vf_dev_uninit(struct rte_eth_dev *dev);
 static struct rte_pci_id qdma_vf_pci_id_tbl[] = {
 #define RTE_PCI_DEV_ID_DECL_XNIC(vend, dev) {RTE_PCI_DEVICE(vend, dev)},
 #ifndef PCI_VENDOR_ID_XILINX
-#define PCI_VENDOR_ID_XILINX 0x10ee
+#define PCI_VENDOR_ID_XILINX 0xa400
 #endif
 
 	/** Gen 1 VF */

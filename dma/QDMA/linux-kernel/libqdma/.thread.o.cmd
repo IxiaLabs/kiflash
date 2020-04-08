@@ -1,19 +1,22 @@
-cmd_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := gcc -Wp,-MD,/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/.thread.o.d  -nostdinc -isystem /usr/lib/gcc/x86_64-linux-gnu/6/include  -I./arch/x86/include -I./arch/x86/include/generated  -I./include -I./arch/x86/include/uapi -I./arch/x86/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -Iubuntu/include  -D__KERNEL__ -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -Werror-implicit-function-declaration -Wno-format-security -std=gnu89 -fno-PIE -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -m64 -falign-jumps=1 -falign-loops=1 -mno-80387 -mno-fp-ret-in-387 -mpreferred-stack-boundary=3 -mskip-rax-setup -mtune=generic -mno-red-zone -mcmodel=kernel -funit-at-a-time -DCONFIG_X86_X32_ABI -DCONFIG_AS_CFI=1 -DCONFIG_AS_CFI_SIGNAL_FRAME=1 -DCONFIG_AS_CFI_SECTIONS=1 -DCONFIG_AS_FXSAVEQ=1 -DCONFIG_AS_SSSE3=1 -DCONFIG_AS_CRC32=1 -DCONFIG_AS_AVX=1 -DCONFIG_AS_AVX2=1 -DCONFIG_AS_AVX512=1 -DCONFIG_AS_SHA1_NI=1 -DCONFIG_AS_SHA256_NI=1 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -mindirect-branch=thunk-extern -mindirect-branch-register -fno-jump-tables -fno-delete-null-pointer-checks -Wno-frame-address -O2 --param=allow-store-data-races=0 -DCC_HAVE_ASM_GOTO -Wframe-larger-than=1024 -fstack-protector-strong -Wno-unused-but-set-variable -Wno-unused-const-variable -fno-omit-frame-pointer -fno-optimize-sibling-calls -fno-var-tracking-assignments -pg -mfentry -DCC_USING_FENTRY -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fno-merge-all-constants -fmerge-constants -fno-stack-check -fconserve-stack -Werror=implicit-int -Werror=strict-prototypes -Werror=date-time -Werror=incompatible-pointer-types -Werror=designated-init -D__READ_ONCE_DEFINED__ -DLINUX -D__KERNEL__ -DMODULE -O2 -pipe -Wall -Werror -DGITSP -DGIT -DKERNEL_HAS_KCONFIG_H -DKERNEL_HAS_EXPORT_H -DDEBUGFS -I/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/qdma_access -I/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma -D__QDMA_VF__ -I/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/include -I/lib/modules/4.15.0-88-generic/build/include -I.  -DMODULE  -DKBUILD_BASENAME='"thread"'  -DKBUILD_MODNAME='"qdma_vf"' -c -o /home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o /home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.c
+cmd_/home/thomas01/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := gcc -Wp,-MD,/home/thomas01/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/.thread.o.d  -nostdinc -isystem /usr/lib/gcc/x86_64-linux-gnu/7/include  -I./arch/x86/include -I./arch/x86/include/generated  -I./include -I./arch/x86/include/uapi -I./arch/x86/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -Iubuntu/include  -include ./include/linux/compiler_types.h -D__KERNEL__ -Wall -Wundef -Werror=strict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror-implicit-function-declaration -Werror=implicit-int -Wno-format-security -std=gnu89 -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -m64 -falign-jumps=1 -falign-loops=1 -mno-80387 -mno-fp-ret-in-387 -mpreferred-stack-boundary=3 -mskip-rax-setup -mtune=generic -mno-red-zone -mcmodel=kernel -DCONFIG_X86_X32_ABI -DCONFIG_AS_CFI=1 -DCONFIG_AS_CFI_SIGNAL_FRAME=1 -DCONFIG_AS_CFI_SECTIONS=1 -DCONFIG_AS_FXSAVEQ=1 -DCONFIG_AS_SSSE3=1 -DCONFIG_AS_AVX=1 -DCONFIG_AS_AVX2=1 -DCONFIG_AS_AVX512=1 -DCONFIG_AS_SHA1_NI=1 -DCONFIG_AS_SHA256_NI=1 -Wno-sign-compare -fno-asynchronous-unwind-tables -mindirect-branch=thunk-extern -mindirect-branch-register -fno-jump-tables -fno-delete-null-pointer-checks -Wno-frame-address -Wno-format-truncation -Wno-format-overflow -Wno-int-in-bool-context -O2 --param=allow-store-data-races=0 -Wframe-larger-than=1024 -fstack-protector-strong -Wno-unused-but-set-variable -Wno-unused-const-variable -fno-omit-frame-pointer -fno-optimize-sibling-calls -fno-var-tracking-assignments -pg -mrecord-mcount -mfentry -DCC_USING_FENTRY -Wdeclaration-after-statement -Wvla -Wno-pointer-sign -fno-strict-overflow -fno-merge-all-constants -fmerge-constants -fno-stack-check -fconserve-stack -Werror=date-time -Werror=incompatible-pointer-types -Werror=designated-init -D__READ_ONCE_DEFINED__ -DLINUX -D__KERNEL__ -DMODULE -O2 -pipe -Wall -Werror -DGITSP -DGIT -DKERNEL_HAS_KCONFIG_H -DKERNEL_HAS_EXPORT_H -DDEBUGFS -I/home/thomas01/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/qdma_access -I/home/thomas01/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma -D__QDMA_VF__ -I/home/thomas01/git/kiflash/dma/QDMA/linux-kernel/include -I/lib/modules/5.0.0-32-generic/build/include -I.  -DMODULE  -DKBUILD_BASENAME='"thread"' -DKBUILD_MODNAME='"qdma_vf"' -c -o /home/thomas01/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o /home/thomas01/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.c
 
-source_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := /home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.c
+source_/home/thomas01/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := /home/thomas01/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.c
 
-deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
+deps_/home/thomas01/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
+  include/linux/kconfig.h \
+    $(wildcard include/config/cpu/big/endian.h) \
+    $(wildcard include/config/booger.h) \
+    $(wildcard include/config/foo.h) \
   include/linux/compiler_types.h \
     $(wildcard include/config/have/arch/compiler/h.h) \
     $(wildcard include/config/enable/must/check.h) \
-    $(wildcard include/config/enable/warn/deprecated.h) \
-  include/linux/compiler-gcc.h \
     $(wildcard include/config/arch/supports/optimized/inlining.h) \
     $(wildcard include/config/optimize/inlining.h) \
+  include/linux/compiler_attributes.h \
+  include/linux/compiler-gcc.h \
     $(wildcard include/config/retpoline.h) \
-    $(wildcard include/config/gcov/kernel.h) \
     $(wildcard include/config/arch/use/builtin/bswap.h) \
-  /home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.h \
+  /home/thomas01/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.h \
   include/generated/uapi/linux/version.h \
   include/linux/spinlock.h \
     $(wildcard include/config/smp.h) \
@@ -24,30 +27,23 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
   include/linux/preempt.h \
     $(wildcard include/config/preempt/count.h) \
     $(wildcard include/config/debug/preempt.h) \
-    $(wildcard include/config/preempt/tracer.h) \
+    $(wildcard include/config/trace/preempt/toggle.h) \
     $(wildcard include/config/preempt/notifiers.h) \
   include/linux/linkage.h \
+  include/linux/compiler_types.h \
   include/linux/stringify.h \
   include/linux/export.h \
-    $(wildcard include/config/have/underscore/symbol/prefix.h) \
     $(wildcard include/config/modules.h) \
     $(wildcard include/config/modversions.h) \
     $(wildcard include/config/module/rel/crcs.h) \
+    $(wildcard include/config/have/arch/prel32/relocations.h) \
     $(wildcard include/config/trim/unused/ksyms.h) \
     $(wildcard include/config/unused/symbols.h) \
-  arch/x86/include/asm/linkage.h \
-    $(wildcard include/config/x86/32.h) \
-    $(wildcard include/config/x86/64.h) \
-    $(wildcard include/config/x86/alignment/16.h) \
-  include/linux/list.h \
-    $(wildcard include/config/debug/list.h) \
-  include/linux/types.h \
-    $(wildcard include/config/have/uid16.h) \
-    $(wildcard include/config/uid16.h) \
-    $(wildcard include/config/lbdaf.h) \
-    $(wildcard include/config/arch/dma/addr/t/64bit.h) \
-    $(wildcard include/config/phys/addr/t/64bit.h) \
-    $(wildcard include/config/64bit.h) \
+  include/linux/compiler.h \
+    $(wildcard include/config/trace/branch/profiling.h) \
+    $(wildcard include/config/profile/all/branches.h) \
+    $(wildcard include/config/stack/validation.h) \
+    $(wildcard include/config/kasan.h) \
   include/uapi/linux/types.h \
   arch/x86/include/uapi/asm/types.h \
   include/uapi/asm-generic/types.h \
@@ -55,16 +51,38 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
   include/uapi/asm-generic/int-ll64.h \
   arch/x86/include/uapi/asm/bitsperlong.h \
   include/asm-generic/bitsperlong.h \
+    $(wildcard include/config/64bit.h) \
   include/uapi/asm-generic/bitsperlong.h \
   include/uapi/linux/posix_types.h \
   include/linux/stddef.h \
   include/uapi/linux/stddef.h \
   arch/x86/include/asm/posix_types.h \
+    $(wildcard include/config/x86/32.h) \
   arch/x86/include/uapi/asm/posix_types_64.h \
   include/uapi/asm-generic/posix_types.h \
+  arch/x86/include/asm/barrier.h \
+  arch/x86/include/asm/alternative.h \
+  include/linux/types.h \
+    $(wildcard include/config/have/uid16.h) \
+    $(wildcard include/config/uid16.h) \
+    $(wildcard include/config/lbdaf.h) \
+    $(wildcard include/config/arch/dma/addr/t/64bit.h) \
+    $(wildcard include/config/phys/addr/t/64bit.h) \
+  arch/x86/include/asm/asm.h \
+  arch/x86/include/asm/nops.h \
+    $(wildcard include/config/mk7.h) \
+    $(wildcard include/config/x86/p6/nop.h) \
+    $(wildcard include/config/x86/64.h) \
+  include/asm-generic/barrier.h \
+  include/linux/kasan-checks.h \
+  arch/x86/include/asm/linkage.h \
+    $(wildcard include/config/x86/alignment/16.h) \
+  include/linux/list.h \
+    $(wildcard include/config/debug/list.h) \
   include/linux/poison.h \
     $(wildcard include/config/illegal/pointer/value.h) \
     $(wildcard include/config/page/poisoning/zero.h) \
+  include/linux/const.h \
   include/uapi/linux/const.h \
   include/linux/kernel.h \
     $(wildcard include/config/preempt/voluntary.h) \
@@ -73,29 +91,17 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
     $(wildcard include/config/prove/locking.h) \
     $(wildcard include/config/arch/has/refcount.h) \
     $(wildcard include/config/lock/down/kernel.h) \
+    $(wildcard include/config/lock/down/mandatory.h) \
     $(wildcard include/config/panic/timeout.h) \
     $(wildcard include/config/tracing.h) \
     $(wildcard include/config/ftrace/mcount/record.h) \
-  /usr/lib/gcc/x86_64-linux-gnu/6/include/stdarg.h \
-  include/linux/compiler.h \
-    $(wildcard include/config/trace/branch/profiling.h) \
-    $(wildcard include/config/profile/all/branches.h) \
-    $(wildcard include/config/stack/validation.h) \
-    $(wildcard include/config/kasan.h) \
-  arch/x86/include/asm/barrier.h \
-    $(wildcard include/config/x86/ppro/fence.h) \
-  arch/x86/include/asm/alternative.h \
-  arch/x86/include/asm/asm.h \
-  arch/x86/include/asm/nops.h \
-    $(wildcard include/config/mk7.h) \
-    $(wildcard include/config/x86/p6/nop.h) \
-  include/asm-generic/barrier.h \
-  include/linux/kasan-checks.h \
+  /usr/lib/gcc/x86_64-linux-gnu/7/include/stdarg.h \
   include/linux/bitops.h \
   include/linux/bits.h \
   arch/x86/include/asm/bitops.h \
     $(wildcard include/config/x86/cmov.h) \
   arch/x86/include/asm/rmwcc.h \
+    $(wildcard include/config/cc/has/asm/goto.h) \
   include/asm-generic/bitops/find.h \
     $(wildcard include/config/generic/find/first/bit.h) \
   include/asm-generic/bitops/sched.h \
@@ -108,18 +114,18 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
     $(wildcard include/config/x86/cmpxchg64.h) \
     $(wildcard include/config/x86/use/3dnow.h) \
     $(wildcard include/config/matom.h) \
-    $(wildcard include/config/x86/5level.h) \
     $(wildcard include/config/paravirt.h) \
   arch/x86/include/asm/disabled-features.h \
     $(wildcard include/config/x86/intel/mpx.h) \
+    $(wildcard include/config/x86/smap.h) \
     $(wildcard include/config/x86/intel/umip.h) \
     $(wildcard include/config/x86/intel/memory/protection/keys.h) \
+    $(wildcard include/config/x86/5level.h) \
     $(wildcard include/config/page/table/isolation.h) \
   include/asm-generic/bitops/const_hweight.h \
   include/asm-generic/bitops/le.h \
   arch/x86/include/uapi/asm/byteorder.h \
   include/linux/byteorder/little_endian.h \
-    $(wildcard include/config/cpu/big/endian.h) \
   include/uapi/linux/byteorder/little_endian.h \
   include/linux/swab.h \
   include/uapi/linux/swab.h \
@@ -132,6 +138,7 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
   include/linux/printk.h \
     $(wildcard include/config/message/loglevel/default.h) \
     $(wildcard include/config/console/loglevel/default.h) \
+    $(wildcard include/config/console/loglevel/quiet.h) \
     $(wildcard include/config/early/printk.h) \
     $(wildcard include/config/printk/nmi.h) \
     $(wildcard include/config/printk.h) \
@@ -152,6 +159,7 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
   include/linux/dynamic_debug.h \
     $(wildcard include/config/jump/label.h) \
   include/linux/jump_label.h \
+    $(wildcard include/config/have/arch/jump/label/relative.h) \
   arch/x86/include/asm/jump_label.h \
   include/linux/build_bug.h \
   arch/x86/include/asm/preempt.h \
@@ -179,16 +187,24 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
     $(wildcard include/config/bug.h) \
     $(wildcard include/config/generic/bug/relative/pointers.h) \
   include/linux/restart_block.h \
-    $(wildcard include/config/compat.h) \
+  include/linux/time64.h \
+    $(wildcard include/config/64bit/time.h) \
+  include/linux/math64.h \
+    $(wildcard include/config/arch/supports/int128.h) \
+  arch/x86/include/asm/div64.h \
+  include/asm-generic/div64.h \
+  include/uapi/linux/time.h \
   arch/x86/include/asm/current.h \
   arch/x86/include/asm/thread_info.h \
     $(wildcard include/config/vm86.h) \
     $(wildcard include/config/frame/pointer.h) \
+    $(wildcard include/config/compat.h) \
     $(wildcard include/config/ia32/emulation.h) \
   arch/x86/include/asm/page.h \
   arch/x86/include/asm/page_types.h \
     $(wildcard include/config/physical/start.h) \
     $(wildcard include/config/physical/align.h) \
+    $(wildcard include/config/dynamic/physical/mask.h) \
   include/linux/mem_encrypt.h \
     $(wildcard include/config/arch/has/mem/encrypt.h) \
   arch/x86/include/asm/mem_encrypt.h \
@@ -210,9 +226,10 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
   include/uapi/video/edid.h \
   arch/x86/include/asm/page_64_types.h \
     $(wildcard include/config/kasan/extra.h) \
-    $(wildcard include/config/randomize/memory.h) \
+    $(wildcard include/config/dynamic/memory/layout.h) \
     $(wildcard include/config/randomize/base.h) \
   arch/x86/include/asm/kaslr.h \
+    $(wildcard include/config/randomize/memory.h) \
   arch/x86/include/asm/page_64.h \
     $(wildcard include/config/debug/virtual.h) \
     $(wildcard include/config/flatmem.h) \
@@ -226,9 +243,10 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
   include/asm-generic/getorder.h \
   arch/x86/include/asm/cpufeature.h \
     $(wildcard include/config/x86/feature/names.h) \
-    $(wildcard include/config/x86/fast/feature/tests.h) \
   arch/x86/include/asm/processor.h \
-    $(wildcard include/config/cc/stackprotector.h) \
+    $(wildcard include/config/kvm.h) \
+    $(wildcard include/config/stackprotector.h) \
+    $(wildcard include/config/paravirt/xxl.h) \
     $(wildcard include/config/x86/debugctlmsr.h) \
     $(wildcard include/config/cpu/sup/amd.h) \
     $(wildcard include/config/xen.h) \
@@ -258,11 +276,6 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
   include/linux/static_key.h \
   arch/x86/include/asm/alternative-asm.h \
   arch/x86/include/asm/msr-index.h \
-    $(wildcard include/config/control.h) \
-    $(wildcard include/config/tdp/nominal.h) \
-    $(wildcard include/config/tdp/level/1.h) \
-    $(wildcard include/config/tdp/level/2.h) \
-    $(wildcard include/config/tdp/control.h) \
   arch/x86/include/asm/spinlock_types.h \
     $(wildcard include/config/paravirt/spinlocks.h) \
   include/asm-generic/qspinlock_types.h \
@@ -294,6 +307,7 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
   arch/x86/include/asm/cmpxchg.h \
   arch/x86/include/asm/cmpxchg_64.h \
   arch/x86/include/asm/atomic64_64.h \
+  include/asm-generic/atomic-instrumented.h \
   include/linux/tracepoint-defs.h \
   include/linux/atomic.h \
     $(wildcard include/config/generic/atomic64.h) \
@@ -307,14 +321,11 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
   arch/x86/include/asm/orc_types.h \
   include/linux/personality.h \
   include/uapi/linux/personality.h \
-  include/linux/math64.h \
-    $(wildcard include/config/arch/supports/int128.h) \
-  arch/x86/include/asm/div64.h \
-  include/asm-generic/div64.h \
   include/linux/err.h \
   include/linux/irqflags.h \
     $(wildcard include/config/trace/irqflags.h) \
     $(wildcard include/config/irqsoff/tracer.h) \
+    $(wildcard include/config/preempt/tracer.h) \
     $(wildcard include/config/trace/irqflags/support.h) \
   arch/x86/include/asm/irqflags.h \
   include/linux/bottom_half.h \
@@ -372,8 +383,8 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
     $(wildcard include/config/blk/dev/io/trace.h) \
     $(wildcard include/config/preempt/rcu.h) \
     $(wildcard include/config/tasks/rcu.h) \
+    $(wildcard include/config/psi.h) \
     $(wildcard include/config/memcg.h) \
-    $(wildcard include/config/slob.h) \
     $(wildcard include/config/compat/brk.h) \
     $(wildcard include/config/cgroups.h) \
     $(wildcard include/config/arch/has/scaled/cputime.h) \
@@ -389,11 +400,12 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
     $(wildcard include/config/block.h) \
     $(wildcard include/config/task/xacct.h) \
     $(wildcard include/config/cpusets.h) \
-    $(wildcard include/config/intel/rdt.h) \
+    $(wildcard include/config/x86/cpu/resctrl.h) \
     $(wildcard include/config/futex.h) \
     $(wildcard include/config/perf/events.h) \
     $(wildcard include/config/numa.h) \
     $(wildcard include/config/numa/balancing.h) \
+    $(wildcard include/config/rseq.h) \
     $(wildcard include/config/task/delay/acct.h) \
     $(wildcard include/config/fault/injection.h) \
     $(wildcard include/config/latencytop.h) \
@@ -404,6 +416,9 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
     $(wildcard include/config/vmap/stack.h) \
     $(wildcard include/config/livepatch.h) \
     $(wildcard include/config/security.h) \
+    $(wildcard include/config/gcc/plugin/stackleak.h) \
+    $(wildcard include/config/arch/task/struct/on/stack.h) \
+    $(wildcard include/config/debug/rseq.h) \
   include/uapi/linux/sched.h \
   include/linux/pid.h \
   include/linux/rculist.h \
@@ -418,20 +433,18 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
     $(wildcard include/config/arch/weak/release/acquire.h) \
   include/linux/rcutree.h \
   include/linux/sem.h \
-  include/linux/time64.h \
-  include/uapi/linux/time.h \
   include/uapi/linux/sem.h \
   include/linux/ipc.h \
   include/linux/uidgid.h \
     $(wildcard include/config/multiuser.h) \
     $(wildcard include/config/user/ns.h) \
   include/linux/highuid.h \
-  include/linux/rhashtable.h \
-  include/linux/errno.h \
-  include/uapi/linux/errno.h \
-  include/linux/jhash.h \
-  include/linux/unaligned/packed_struct.h \
-  include/linux/list_nulls.h \
+  include/linux/rhashtable-types.h \
+  include/linux/mutex.h \
+    $(wildcard include/config/mutex/spin/on/owner.h) \
+  include/linux/osq_lock.h \
+  include/linux/debug_locks.h \
+    $(wildcard include/config/debug/locking/api/selftests.h) \
   include/linux/workqueue.h \
     $(wildcard include/config/debug/objects/work.h) \
     $(wildcard include/config/freezer.h) \
@@ -458,15 +471,12 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
     $(wildcard include/config/x86/tsc.h) \
   include/generated/timeconst.h \
   include/linux/timekeeping.h \
+  include/linux/errno.h \
+  include/uapi/linux/errno.h \
   include/linux/timekeeping32.h \
   include/linux/debugobjects.h \
     $(wildcard include/config/debug/objects.h) \
     $(wildcard include/config/debug/objects/free.h) \
-  include/linux/mutex.h \
-    $(wildcard include/config/mutex/spin/on/owner.h) \
-  include/linux/osq_lock.h \
-  include/linux/debug_locks.h \
-    $(wildcard include/config/debug/locking/api/selftests.h) \
   include/uapi/linux/ipc.h \
   arch/x86/include/uapi/asm/ipcbuf.h \
   include/uapi/asm-generic/ipcbuf.h \
@@ -554,22 +564,51 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
   include/asm-generic/pci_iomap.h \
     $(wildcard include/config/no/generic/pci/ioport/map.h) \
     $(wildcard include/config/generic/pci/iomap.h) \
-  include/xen/xen.h \
-    $(wildcard include/config/xen/pvh.h) \
-    $(wildcard include/config/xen/dom0.h) \
-  include/xen/interface/xen.h \
-  arch/x86/include/asm/xen/interface.h \
-  arch/x86/include/asm/xen/interface_64.h \
-  arch/x86/include/asm/pvclock-abi.h \
-  arch/x86/include/asm/xen/hypervisor.h \
   include/asm-generic/io.h \
     $(wildcard include/config/virt/to/bus.h) \
   include/linux/logic_pio.h \
     $(wildcard include/config/indirect/pio.h) \
   include/linux/fwnode.h \
   include/linux/vmalloc.h \
+  include/linux/overflow.h \
   arch/x86/include/uapi/asm/vsyscall.h \
   include/asm-generic/fixmap.h \
+  include/linux/mm_types.h \
+    $(wildcard include/config/have/aligned/struct/page.h) \
+    $(wildcard include/config/userfaultfd.h) \
+    $(wildcard include/config/have/arch/compat/mmap/bases.h) \
+    $(wildcard include/config/membarrier.h) \
+    $(wildcard include/config/aio.h) \
+    $(wildcard include/config/mmu/notifier.h) \
+    $(wildcard include/config/transparent/hugepage.h) \
+    $(wildcard include/config/arch/want/batched/unmap/tlb/flush.h) \
+    $(wildcard include/config/hugetlb/page.h) \
+    $(wildcard include/config/hmm.h) \
+  include/linux/mm_types_task.h \
+    $(wildcard include/config/split/ptlock/cpus.h) \
+    $(wildcard include/config/arch/enable/split/pmd/ptlock.h) \
+  arch/x86/include/asm/tlbbatch.h \
+  include/linux/auxvec.h \
+  include/uapi/linux/auxvec.h \
+  arch/x86/include/uapi/asm/auxvec.h \
+  include/linux/completion.h \
+  include/linux/wait.h \
+  include/uapi/linux/wait.h \
+  include/linux/uprobes.h \
+  arch/x86/include/asm/uprobes.h \
+  include/linux/notifier.h \
+    $(wildcard include/config/tree/srcu.h) \
+  include/linux/srcu.h \
+    $(wildcard include/config/tiny/srcu.h) \
+    $(wildcard include/config/srcu.h) \
+  include/linux/rcu_segcblist.h \
+  include/linux/srcutree.h \
+  include/linux/rcu_node_tree.h \
+    $(wildcard include/config/rcu/fanout.h) \
+    $(wildcard include/config/rcu/fanout/leaf.h) \
+  include/linux/page-flags-layout.h \
+    $(wildcard include/config/kasan/sw/tags.h) \
+  include/generated/bounds.h \
   arch/x86/include/asm/hardirq.h \
     $(wildcard include/config/kvm/intel.h) \
     $(wildcard include/config/have/kvm.h) \
@@ -612,13 +651,10 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
   include/uapi/asm-generic/signal-defs.h \
   arch/x86/include/uapi/asm/siginfo.h \
   include/uapi/asm-generic/siginfo.h \
-  include/linux/mm_types_task.h \
-    $(wildcard include/config/arch/want/batched/unmap/tlb/flush.h) \
-    $(wildcard include/config/split/ptlock/cpus.h) \
-    $(wildcard include/config/arch/enable/split/pmd/ptlock.h) \
-  arch/x86/include/asm/tlbbatch.h \
+  include/linux/psi_types.h \
   include/linux/task_io_accounting.h \
     $(wildcard include/config/task/io/accounting.h) \
+  include/uapi/linux/rseq.h \
   include/linux/cgroup.h \
     $(wildcard include/config/cgroup/cpuacct.h) \
     $(wildcard include/config/sock/cgroup/data.h) \
@@ -641,8 +677,6 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
     $(wildcard include/config/mandatory/file/locking.h) \
     $(wildcard include/config/migration.h) \
   include/linux/wait_bit.h \
-  include/linux/wait.h \
-  include/uapi/linux/wait.h \
   include/linux/kdev_t.h \
   include/uapi/linux/kdev_t.h \
   include/linux/dcache.h \
@@ -651,7 +685,6 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
   include/linux/bit_spinlock.h \
   include/linux/lockref.h \
     $(wildcard include/config/arch/use/cmpxchg/lockref.h) \
-  include/generated/bounds.h \
   include/linux/stringhash.h \
     $(wildcard include/config/dcache/word/access.h) \
   include/linux/hash.h \
@@ -661,58 +694,11 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
   arch/x86/include/uapi/asm/stat.h \
   include/uapi/linux/stat.h \
   include/linux/list_lru.h \
+    $(wildcard include/config/memcg/kmem.h) \
   include/linux/shrinker.h \
   include/linux/radix-tree.h \
-    $(wildcard include/config/radix/tree/multiorder.h) \
-  include/linux/mm_types.h \
-    $(wildcard include/config/have/cmpxchg/double.h) \
-    $(wildcard include/config/have/aligned/struct/page.h) \
-    $(wildcard include/config/transparent/hugepage.h) \
-    $(wildcard include/config/userfaultfd.h) \
-    $(wildcard include/config/have/arch/compat/mmap/bases.h) \
-    $(wildcard include/config/membarrier.h) \
-    $(wildcard include/config/aio.h) \
-    $(wildcard include/config/mmu/notifier.h) \
-    $(wildcard include/config/hugetlb/page.h) \
-    $(wildcard include/config/hmm.h) \
-  include/linux/auxvec.h \
-  include/uapi/linux/auxvec.h \
-  arch/x86/include/uapi/asm/auxvec.h \
-  include/linux/completion.h \
-  include/linux/uprobes.h \
-  arch/x86/include/asm/uprobes.h \
-  include/linux/notifier.h \
-  include/linux/srcu.h \
-    $(wildcard include/config/tiny/srcu.h) \
-    $(wildcard include/config/tree/srcu.h) \
-    $(wildcard include/config/srcu.h) \
-  include/linux/rcu_segcblist.h \
-  include/linux/srcutree.h \
-  include/linux/rcu_node_tree.h \
-    $(wildcard include/config/rcu/fanout.h) \
-    $(wildcard include/config/rcu/fanout/leaf.h) \
-  include/linux/page-flags-layout.h \
-  include/linux/capability.h \
-  include/uapi/linux/capability.h \
-  include/linux/semaphore.h \
-  include/linux/fcntl.h \
-  include/uapi/linux/fcntl.h \
-  arch/x86/include/uapi/asm/fcntl.h \
-  include/uapi/asm-generic/fcntl.h \
-  include/uapi/linux/fiemap.h \
-  include/linux/migrate_mode.h \
-  include/linux/percpu-rwsem.h \
-  include/linux/rcuwait.h \
-  include/linux/rcu_sync.h \
-  include/linux/delayed_call.h \
-  include/linux/uuid.h \
-  include/uapi/linux/uuid.h \
-  include/linux/errseq.h \
-  include/uapi/linux/fs.h \
-  include/uapi/linux/limits.h \
-  include/linux/quota.h \
-    $(wildcard include/config/quota/netlink/interface.h) \
-  include/linux/percpu_counter.h \
+  include/linux/xarray.h \
+    $(wildcard include/config/xarray/multi.h) \
   include/linux/gfp.h \
     $(wildcard include/config/zone/dma.h) \
     $(wildcard include/config/zone/dma32.h) \
@@ -727,10 +713,8 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
     $(wildcard include/config/memory/hotplug.h) \
     $(wildcard include/config/flat/node/mem/map.h) \
     $(wildcard include/config/page/extension.h) \
-    $(wildcard include/config/no/bootmem.h) \
     $(wildcard include/config/deferred/struct/page/init.h) \
     $(wildcard include/config/have/memory/present.h) \
-    $(wildcard include/config/need/node/memmap/size.h) \
     $(wildcard include/config/have/memblock/node/map.h) \
     $(wildcard include/config/have/arch/early/pfn/to/nid.h) \
     $(wildcard include/config/sparsemem/extreme.h) \
@@ -749,6 +733,31 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
   include/linux/topology.h \
     $(wildcard include/config/use/percpu/numa/node/id.h) \
     $(wildcard include/config/sched/smt.h) \
+  include/linux/kconfig.h \
+  include/linux/capability.h \
+  include/uapi/linux/capability.h \
+  include/linux/semaphore.h \
+  include/linux/fcntl.h \
+  include/uapi/linux/fcntl.h \
+  arch/x86/include/uapi/asm/fcntl.h \
+  include/uapi/asm-generic/fcntl.h \
+  include/uapi/linux/fiemap.h \
+  include/linux/migrate_mode.h \
+  include/linux/percpu-rwsem.h \
+  include/linux/rcuwait.h \
+  include/linux/rcu_sync.h \
+  include/linux/delayed_call.h \
+  include/linux/uuid.h \
+  include/uapi/linux/uuid.h \
+  include/linux/errseq.h \
+  include/linux/ioprio.h \
+  include/linux/sched/rt.h \
+  include/linux/iocontext.h \
+  include/uapi/linux/fs.h \
+  include/uapi/linux/limits.h \
+  include/linux/quota.h \
+    $(wildcard include/config/quota/netlink/interface.h) \
+  include/linux/percpu_counter.h \
   include/uapi/linux/dqblk_xfs.h \
   include/linux/dqblk_v1.h \
   include/linux/dqblk_v2.h \
@@ -766,13 +775,12 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
   include/uapi/linux/sysctl.h \
   include/linux/assoc_array.h \
     $(wildcard include/config/associative/array.h) \
-  include/linux/selinux.h \
-    $(wildcard include/config/security/selinux.h) \
   include/linux/sched/user.h \
     $(wildcard include/config/fanotify.h) \
     $(wildcard include/config/posix/mqueue.h) \
     $(wildcard include/config/bpf/syscall.h) \
     $(wildcard include/config/net.h) \
+  include/linux/ratelimit.h \
   include/linux/kernfs.h \
     $(wildcard include/config/kernfs.h) \
   include/linux/idr.h \
@@ -808,9 +816,22 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
   include/linux/u64_stats_sync.h \
   include/linux/bpf-cgroup.h \
     $(wildcard include/config/cgroup/bpf.h) \
+  include/linux/bpf.h \
+    $(wildcard include/config/bpf/stream/parser.h) \
+    $(wildcard include/config/xdp/sockets.h) \
+    $(wildcard include/config/inet.h) \
   include/uapi/linux/bpf.h \
     $(wildcard include/config/efficient/unaligned/access.h) \
+    $(wildcard include/config/ip/route/classid.h) \
+    $(wildcard include/config/bpf/kprobe/override.h) \
+    $(wildcard include/config/function/error/injection.h) \
+    $(wildcard include/config/xfrm.h) \
+    $(wildcard include/config/bpf/lirc/mode2.h) \
   include/uapi/linux/bpf_common.h \
+  include/linux/file.h \
+  include/linux/rbtree_latch.h \
+  include/linux/bpf_types.h \
+    $(wildcard include/config/bpf/events.h) \
   include/linux/cgroup_subsys.h \
     $(wildcard include/config/cgroup/device.h) \
     $(wildcard include/config/cgroup/freezer.h) \
@@ -828,19 +849,20 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
     $(wildcard include/config/have/copy/thread/tls.h) \
     $(wildcard include/config/have/exit/thread.h) \
     $(wildcard include/config/arch/wants/dynamic/task/struct.h) \
+    $(wildcard include/config/have/arch/thread/struct/whitelist.h) \
   include/linux/mm.h \
     $(wildcard include/config/have/arch/mmap/rnd/bits.h) \
     $(wildcard include/config/have/arch/mmap/rnd/compat/bits.h) \
     $(wildcard include/config/arch/uses/high/vma/flags.h) \
+    $(wildcard include/config/arch/has/pkeys.h) \
     $(wildcard include/config/ppc.h) \
     $(wildcard include/config/parisc.h) \
-    $(wildcard include/config/metag.h) \
     $(wildcard include/config/ia64.h) \
+    $(wildcard include/config/sparc64.h) \
     $(wildcard include/config/stack/growsup.h) \
-    $(wildcard include/config/device/private.h) \
-    $(wildcard include/config/device/public.h) \
+    $(wildcard include/config/dev/pagemap/ops.h) \
+    $(wildcard include/config/pci/p2pdma.h) \
     $(wildcard include/config/shmem.h) \
-    $(wildcard include/config/have/memblock.h) \
     $(wildcard include/config/debug/vm/rb.h) \
     $(wildcard include/config/page/poisoning.h) \
     $(wildcard include/config/debug/pagealloc.h) \
@@ -883,9 +905,8 @@ deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o := \
     $(wildcard include/config/memory/balloon.h) \
     $(wildcard include/config/balloon/compaction.h) \
   include/linux/signal.h \
-  /home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/qdma_compat.h \
-  include/linux/swait.h \
+  /home/thomas01/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/qdma_compat.h \
 
-/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o: $(deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o)
+/home/thomas01/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o: $(deps_/home/thomas01/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o)
 
-$(deps_/home/ixiaadmin/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o):
+$(deps_/home/thomas01/git/kiflash/dma/QDMA/linux-kernel/drv/libqdma/thread.o):

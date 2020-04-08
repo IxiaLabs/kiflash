@@ -16,7 +16,7 @@
 #include "xvsec_cdev.h"
 
 
-#define XVSEC_MAGIC_NO		0x10EE
+#define XVSEC_MAGIC_NO		0xa400
 #define INVALID_DEVICE_INDEX	0xFFFF
 
 const static char version[] =
