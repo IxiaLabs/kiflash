@@ -100,7 +100,7 @@ Frequently asked questions:
   A: The xdma/xdma_mod.c file constains the pci_device_id struct that identifies
      the PCIe Device IDs that are recognized by the driver in the following
      format:
-         { PCI_DEVICE(0x10ee, 0x8038), },
+         { PCI_DEVICE(0x10ee, 0xa400), },
      Add, remove, or modify the PCIe Device IDs in this struct as desired. Then
      uninstall the existing xdma kernel module, compile the driver again, and
      re-install the driver using the load_driver.sh script.
