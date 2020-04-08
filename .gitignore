@@ -31,3 +31,6 @@ testem.log
 Thumbs.db
 
 #Log Files
+
+# Object flies
+*.o
