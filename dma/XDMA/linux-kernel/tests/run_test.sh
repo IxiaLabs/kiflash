@@ -20,6 +20,8 @@ transferCount=1
 # Determine if the core is Memory Mapped or Streaming
 isStreaming=0
 h2cChannels=0
+
+i=0
 for ((i=0; i<=3; i++))
 do
   statusRegVal=`$tool_path/reg_rw /dev/xdma0_control 0x0${i}00 w | grep "Read.*:" | sed 's/Read.*: 0x\([a-z0-9]*\)/\1/'`
