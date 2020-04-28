@@ -621,10 +621,9 @@ int xdma_cdev_init(void)
     	return -ENOMEM;
     }
 
-printk("*** skipped xdma_threads_create");
+    printk("xdma created with 4 threads");
    	// xdma_threads_create(8);
-	xdma_threads_create(4);	   
-printk("*** skipped xdma_threads_create exit");
+	xdma_threads_create(4);	  
 	return 0;
 }
 
