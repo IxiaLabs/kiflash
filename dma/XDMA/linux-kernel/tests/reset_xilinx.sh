@@ -11,6 +11,12 @@ lsmod | grep xdma
 if [ $? -eq 0 ]; then
    rmmod xdma
 fi
+echo -n "Reset Xilinx pcie device..."
+sudo chmod 777 /dev/ixia/chassis/pci_dev/reset
+sudo echo 1 > /dev/ixia/chassis/pci_dev/reset
+sudo chmod 200 /dev/ixia/chassis/pci_dev/reset
+sleep 1
+
 echo -n "Loading xdma driver..."
 # Use the following command to Load the driver in the default 
 # or interrupt drive mode. This will allow the driver to use 
