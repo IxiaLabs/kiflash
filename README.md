@@ -6,11 +6,16 @@
 
 There are two components to this.  A command line utility and a core components that is used by antman.
 
+
 The build instruction for the command line component:<br />
 cd /home/ixiaadmin/git/kiflash/kiflashcmd<br />
 sudo make<br />
 
 The build instruction for core component:<br />
+
+Install the streaming wroker sdk https://github.com/freezer333/streaming-worker <br />
+cd /home/ixiaadmin/git/kiflash<br />
+npm install --save streaming-worker-sdk<br />
 cd /home/ixiaadmin/git/kiflash/kiflashcore/src/build<br />
 sudo rm *.o<br />
 cd /home/ixiaadmin/git/kiflash/kiflashcore/src<br />

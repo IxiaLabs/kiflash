@@ -798,7 +798,7 @@ int XSpi_Transfer(XSpi *InstancePtr, u8 *SendBufPtr,
 
 			if (loopcountdown == 0)
 			{
-				printf("** XSpi_Transfer 8.31 IntStatusReg %X timed out\n", StatusReg);					
+				printf("XSpi_Transfer 8.31 IntStatusReg %X timed out\n", StatusReg);					
 				fflush(stdout);
 				return XST_FAILURE;
 			}

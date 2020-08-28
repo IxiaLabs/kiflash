@@ -57,7 +57,7 @@ int fileSize(int fd) {
 
 void pcimem_test(int some)
 {
-	printf("*** pcimem_test entered.\n");		
+	// printf("*** pcimem_test entered.\n");		
 }
 
 void pcimem_init(Pcimem *self)

@@ -87,10 +87,10 @@ class Kiflash : public StreamingWorker {
       N = 0;
       send_factor(progress, N);
       std::future<int> fut = std::async(std::launch::async, func_flashprog);            
-      printf("ffffff after func_flashprog\n");             
+      // printf("ffffff after func_flashprog\n");             
 
       // std::async(std::launch::async, func_flashprog);
-      printf("****kiflash Execute after flashprog\n");        
+      // printf("****kiflash Execute after flashprog\n");        
 
       // while (!closed()) {
       while (N != 100) {

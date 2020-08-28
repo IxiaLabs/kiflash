@@ -984,13 +984,15 @@ int program_user(u32 erase)
 	int Status;
 	if( erase )
 	{		
-		Status = SpiFlashDieErase(&Spi, 2);
-		if( Status != XST_SUCCESS )
-		{
-			printf("program_user failed at erase die 2\n");
-			return XST_FAILURE;
-		}		
-		u32 AddrToEraseBegin = 0x0C000000;  // sector erase from begining of die 3.		
+		// Status = SpiFlashDieErase(&Spi, 2);
+		// FlashData.percentage = 10;
+		// if( Status != XST_SUCCESS )
+		// {
+		// 	printf("program_user failed at erase die 2\n");
+		// 	return XST_FAILURE;
+		// }
+		u32 AddrToEraseBegin = 0x08000000;	// sector erase from begining of die 2	
+		// u32 AddrToEraseBegin = 0x0C000000;  // sector erase from begining of die 3.		
 		u32 SectorsToErase = (FlashData.eraseEndAddr - AddrToEraseBegin) / BYTE_PER_SECTOR;		
 		
 		Status = qspi_erase_sector_flash (AddrToEraseBegin, SectorsToErase);
