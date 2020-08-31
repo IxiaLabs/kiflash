@@ -5,7 +5,14 @@
 ### Good to Know (TM)
 
 There are two components to this.  A command line utility and a core components that is used by antman.
-
+Install build essetials:<br />
+sudo apt-get update && \<br />
+sudo apt-get install build-essential software-properties-common -y && \<br />
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y && \<br />
+sudo apt-get update && \<br />
+sudo apt-get install gcc-6 g++-6 -y && \<br />
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60<br /> --slave /usr/bin/g++ g++ /usr/bin/g++-6 && \<br />
+gcc -v<br />
 
 The build instruction for the command line component:<br />
 cd /home/ixiaadmin/git/kiflash/kiflashcmd<br />
@@ -21,7 +28,7 @@ sudo rm *.o<br />
 cd /home/ixiaadmin/git/kiflash/kiflashcore/src<br />
 sudo ./build.sh<br />
 cd /home/ixiaadmin/git/kiflash<br />
-sudo npm install --unsafe-perm<br />
+sudo npm run-script build-addon<br />
 
 
 sudo cp /home/ixiaadmin/git/kiflash/build/Release/kiflash.node /home/ixiaadmin/git/antman/server<br />
