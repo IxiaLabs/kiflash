@@ -30,4 +30,5 @@ typedef struct {
 int kiflash_init();
 int kiflash_program_user();
 void kiflash_test();
+int kiflash_icap(uint32_t die);
 #endif

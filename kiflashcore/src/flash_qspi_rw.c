@@ -284,6 +284,17 @@ void kiflash_test()
 	printf("**kiflash_test entered\n");
 }
 
+int kiflash_icap(uint32_t die)
+{
+    printf("kiflash_icap, qspi_init_flag %d\n", qspi_init_flag);
+    if (qspi_init_flag ==0)
+    {
+        kiflash_init();
+    }
+
+    printf("calling kiflash_icap %d\n", die);
+    return icap(die);
+}
 
 int kiflash_init()
 {	

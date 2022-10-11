@@ -6,14 +6,21 @@
 #include <future>  
 const int version = 0x01;
 using namespace std;
-void *handle;
+void *handle = NULL;
 void (*func_test)();
 void (*func_flashtest)();
 int (*func_flashprog)();
 int (*func_flashprogress)();
 
+static void icap(const v8::FunctionCallbackInfo<v8::Value>& args);
+
 class Kiflash : public StreamingWorker {
   public:
+    static void Init(v8::Local<v8::Object> exports) {
+        StreamWorkerWrapper::Init(exports);
+        NODE_SET_METHOD(exports, "icap", icap);
+    }
+
     Kiflash(Callback *data, Callback *complete, Callback *error_callback,  v8::Local<v8::Object> & options) 
           : StreamingWorker(data, complete, error_callback){
         printf("Kiflash entered with version %d\n", version);
@@ -125,6 +132,28 @@ StreamingWorker * create_worker(Callback *data
  return new Kiflash(data, complete, error_callback, options);
 }
 
+void icap(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
+    v8::Isolate* isolate = args.GetIsolate();
+    if (!handle) {
+        handle = dlopen("/opt/ixia/mmap/libFlashProvider.so", RTLD_LAZY);
+    }
+    if (!handle) {
+        printf("failed to load libFlashProvider.so\n");
+        fflush(stdout);
+        return;
+    }
+    int (*f_icap)(uint32_t die);
+    *(void**)(&f_icap) = dlsym(handle, "kiflash_icap");
+    if (!f_icap) {
+        printf("cannot find icap in libFlashProvider.so\n");
+        fflush(stdout);
+        return;
+    }
+    f_icap(0);
+}
+
 // Don't forget this!  You can change the name of your module, 
-// but the second parameter should always be as shown.
-NODE_MODULE(kiflash, StreamWorkerWrapper::Init)
+// but the second parameter should always be StreamWorkerWrapper::Init
+// or call StreamWorkerWrapper::Init.
+NODE_MODULE(kiflash, Kiflash::Init)
